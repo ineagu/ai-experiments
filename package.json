@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://ineagu.github.io/ai-experiments",
+  "homepage": "https://ineagu.github.io/ai-experiments/",
   "scripts": {
     "dev": "./node_modules/.bin/vite",
     "build": "tsc && vite build",
