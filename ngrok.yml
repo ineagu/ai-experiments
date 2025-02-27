@@ -1,0 +1,7 @@
+version: 2
+authtoken: 2tdwNNo037mAF01FpCaV5F4SpMg_2Bk5L5fDE4njVDgfzxP2d
+tunnels:
+  vite:
+    proto: http
+    addr: http://localhost:5174
+    host_header: rewrite 
