@@ -18,74 +18,65 @@ const HomePage = () => {
   const [imageSize, setImageSize] = useState('200kb');
   const [sizeReduction, setSizeReduction] = useState(80);
   
-  // Generate optimized image URL based on current parameters
+  // Create mappings for format and focus
+  const formatMap = {
+    'WebP (auto)': 'auto',
+    'JPEG': 'jpeg',
+    'PNG': 'png',
+    'GIF': 'gif',
+    'AVIF': 'avif'
+  };
+
+  const focusMap = {
+    'Smart': 'smart',
+    'Center': 'center',
+    'Top': 'top',
+    'Bottom': 'bottom',
+    'Left': 'left',
+    'Right': 'right'
+  };
+
   useEffect(() => {
-    const formatMap = {
-      'WebP (auto)': 'auto',
-      'AVIF': 'avif',
-      'JPEG': 'jpeg',
-      'PNG': 'png'
-    };
+    // Calculate scaled width and height
+    const scaledWidth = Math.round(1000 * (editorWidth / 100));
+    const scaledHeight = Math.round(1000 * (editorWidth / 100));
     
-    const focusMap = {
-      'Smart': 'smart',
-      'Center': 'center',
-      'Top': 'north',
-      'Bottom': 'south',
-      'Left': 'west',
-      'Right': 'east'
-    };
+    // Create a direct URL with timestamp to completely bypass caching
+    const timestamp = Date.now();
+    const randomId = Math.random().toString(36).substring(2, 8);
+    const { cdn, hash } = getOMWizard();
     
-    // Create image parameters for the Optimole URL
-    const imageParams = {
-      url: 'optimole.com/uploads/2020/07/fp.jpeg',
-      width: Math.round(800 * (editorWidth / 100)),
-      height: Math.round(800 * (editorWidth / 100)),
-      resizeType: 'fill',
-      gravity: focusMap[editorFocus] || 'center',
-      blur: 0,
-      sharpen: 0,
-      pixelate: 0,
-      brightness: 0,
-      contrast: 0,
-      saturation: 0
-    };
+    // Construct URL directly instead of using the utility
+    const newUrl = `https://${cdn}.i.optimole.com/${hash}/rs:fill:${scaledWidth}:${scaledHeight}/g:${focusMap[editorFocus]}/q:${editorQuality}/f:${formatMap[editorFormat]}/https://optimole.com/uploads/2020/07/fp.jpeg?bypass=${timestamp}-${randomId}`;
     
-    // Get the Optimole configuration
-    const optimoleCDN = getOMWizard().cdn;
-    const optimoleHash = getOMWizard().hash;
+    setPreviewImage(newUrl);
     
-    // For width to be more noticeable, we'll apply it to the actual dimensions
-    // Width is scaled between 400-1200px based on the slider
-    const scaledWidth = Math.round(400 + (editorWidth / 100) * 800);
-    const scaledHeight = scaledWidth; // Keep it square for this demo
+    // Log the exact URL for debugging
+    console.log("Direct URL created:", newUrl);
     
-    // Format the URL with quality and format params explicitly to ensure they're applied
-    const url = `https://${optimoleCDN}.i.optimole.com/${optimoleHash}/rs:fill:${scaledWidth}:${scaledHeight}/g:${imageParams.gravity}/q:${editorQuality}/f:${formatMap[editorFormat]}/https://optimole.com/uploads/2020/07/fp.jpeg`;
+    // Calculate image size based on quality, format, and dimensions
+    const originalSize = 2000; // KB - base size of the original image
     
-    setPreviewImage(url);
-    
-    // Fixed size calculation: higher quality = larger file size
-    // Original image base size estimate: 1000kb
-    const baseSize = 1000;
     // Quality affects file size (higher quality = larger file)
     const qualityFactor = editorQuality / 100;
     
     // Format efficiency factors (how much each format reduces size)
-    // AVIF is most efficient, then WebP, then JPEG/PNG
     const formatEfficiency = 
       formatMap[editorFormat] === 'avif' ? 0.4 : 
       formatMap[editorFormat] === 'auto' ? 0.5 : 
-      formatMap[editorFormat] === 'webp' ? 0.6 : 0.8;
+      formatMap[editorFormat] === 'png' ? 0.9 :
+      formatMap[editorFormat] === 'gif' ? 0.7 : 0.7; // jpeg and others
     
-    // Calculate size based on quality and format
-    const newSize = Math.round(baseSize * qualityFactor * formatEfficiency);
-    setImageSize(`${newSize}kb`);
+    // Dimension factor (smaller dimensions = smaller file)
+    const dimensionFactor = (scaledWidth / 1000) * (scaledHeight / 1000);
     
-    // Calculate size reduction (original - new) / original * 100
-    const reduction = Math.round((1 - (newSize / baseSize)) * 100);
+    // Calculate size based on all factors
+    const newSize = Math.round(originalSize * qualityFactor * formatEfficiency * dimensionFactor);
+    setImageSize(`${newSize}KB`);
+    
+    // Calculate size reduction percentage
+    const reduction = Math.round((1 - (newSize / originalSize)) * 100);
     setSizeReduction(Math.max(20, Math.min(95, reduction)));
-    
   }, [editorWidth, editorQuality, editorFormat, editorFocus]);
   
   useEffect(() => {
@@ -125,20 +116,34 @@ const HomePage = () => {
   const formats = ['WebP (auto)', 'AVIF', 'JPEG', 'PNG'];
   const focuses = ['Smart', 'Center', 'Top', 'Bottom', 'Left', 'Right'];
   
-  // Handle width slider interaction
+  // Handle width slider interaction - fixed to properly update the state
   const handleWidthSliderChange = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-    const percentage = Math.round((x / rect.width) * 100);
-    setEditorWidth(Math.max(10, Math.min(100, percentage)));
+    const newWidth = parseInt(e.target.value, 10);
+    setEditorWidth(newWidth);
+    console.log("Width changed to:", newWidth);
   };
   
-  // Handle quality slider interaction
+  // Handle quality slider interaction - fixed to properly update the state
   const handleQualitySliderChange = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
-    const percentage = Math.round((x / rect.width) * 100);
-    setEditorQuality(Math.max(10, Math.min(100, percentage)));
+    const newQuality = parseInt(e.target.value, 10);
+    setEditorQuality(newQuality);
+    console.log("Quality changed to:", newQuality);
+  };
+
+  const cycleFormat = () => {
+    const formats = Object.keys(formatMap);
+    const currentIndex = formats.indexOf(editorFormat);
+    const nextIndex = (currentIndex + 1) % formats.length;
+    setEditorFormat(formats[nextIndex]);
+    console.log("Format changed to:", formats[nextIndex]);
+  };
+
+  const cycleFocus = () => {
+    const focuses = Object.keys(focusMap);
+    const currentIndex = focuses.indexOf(editorFocus);
+    const nextIndex = (currentIndex + 1) % focuses.length;
+    setEditorFocus(focuses[nextIndex]);
+    console.log("Focus changed to:", focuses[nextIndex]);
   };
 
   return (
@@ -166,6 +171,7 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 md:pr-8 mb-10 md:mb-0 text-white">
+              {/* Removed logo as requested */}
               <div className="inline-block px-3 py-1 bg-blue-500/30 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-4 hover:bg-blue-500/40 transition-colors duration-300">
                 Powering 200,000+ websites | Developed by ThemeIsle
               </div>
@@ -246,10 +252,11 @@ const HomePage = () => {
                 <div className="flex rounded-lg overflow-hidden mb-4 h-64 bg-white/10">
                   <div className="w-3/4 relative">
                     <img 
-                      src={previewImage || `https://${getOMWizard().cdn}.i.optimole.com/${getOMWizard().hash}/rs:fill:800:800/g:center/q:85/f:auto/sh:0/https://optimole.com/uploads/2020/07/fp.jpeg`}
+                      src={previewImage || `https://${getOMWizard().cdn}.i.optimole.com/${getOMWizard().hash}/rs:fill:800:800/g:smart/q:85/f:auto/https://optimole.com/uploads/2020/07/fp.jpeg`}
                       alt="Preview" 
                       className="w-full h-full object-cover"
                       style={{ transition: "all 0.5s ease" }}
+                      key={previewImage}
                     />
                     
                     <div className="absolute top-3 left-3 bg-indigo-600/80 backdrop-blur-sm text-white py-1 px-2 rounded-full text-xs font-medium">
@@ -285,15 +292,15 @@ const HomePage = () => {
                         <span>Width</span>
                         <span>{editorWidth}%</span>
                       </div>
-                      <div 
-                        className="h-1.5 rounded-full bg-white/20 cursor-pointer"
-                        onClick={handleWidthSliderChange}
-                      >
-                        <div 
-                          className="h-full bg-blue-400 rounded-full transition-all duration-300" 
-                          style={{width: `${editorWidth}%`}}
-                        ></div>
-                      </div>
+                      {/* Fixed width slider to properly register changes */}
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="100" 
+                        value={editorWidth}
+                        onChange={handleWidthSliderChange}
+                        className="w-full h-1.5 rounded-full bg-white/20 appearance-none cursor-pointer"
+                      />
                     </div>
                     
                     <div className="mb-3">
@@ -301,26 +308,22 @@ const HomePage = () => {
                         <span>Quality</span>
                         <span>{editorQuality}%</span>
                       </div>
-                      <div 
-                        className="h-1.5 rounded-full bg-white/20 cursor-pointer"
-                        onClick={handleQualitySliderChange}
-                      >
-                        <div 
-                          className="h-full bg-blue-400 rounded-full transition-all duration-300" 
-                          style={{width: `${editorQuality}%`}}
-                        ></div>
-                      </div>
+                      {/* Fixed quality slider to properly register changes */}
+                      <input 
+                        type="range" 
+                        min="10" 
+                        max="100" 
+                        value={editorQuality}
+                        onChange={handleQualitySliderChange}
+                        className="w-full h-1.5 rounded-full bg-white/20 appearance-none cursor-pointer"
+                      />
                     </div>
                     
                     <div className="mb-3">
                       <div className="text-xs text-white/70 mb-1">Format</div>
                       <div 
                         className="text-xs text-white bg-white/10 rounded p-1 text-center cursor-pointer hover:bg-white/15 transition-colors duration-300"
-                        onClick={() => {
-                          const current = formats.indexOf(editorFormat);
-                          const next = (current + 1) % formats.length;
-                          setEditorFormat(formats[next]);
-                        }}
+                        onClick={cycleFormat}
                       >
                         {editorFormat}
                       </div>
@@ -330,16 +333,20 @@ const HomePage = () => {
                       <div className="text-xs text-white/70 mb-1">Focus</div>
                       <div 
                         className="text-xs text-white bg-white/10 rounded p-1 text-center cursor-pointer hover:bg-white/15 transition-colors duration-300"
-                        onClick={() => {
-                          const current = focuses.indexOf(editorFocus);
-                          const next = (current + 1) % focuses.length;
-                          setEditorFocus(focuses[next]);
-                        }}
+                        onClick={cycleFocus}
                       >
                         {editorFocus}
                       </div>
                     </div>
                   </div>
+                </div>
+                
+                {/* Display the current URL */}
+                <div className="mb-4 p-3 bg-gray-800 rounded-lg overflow-x-auto">
+                  <p className="text-xs text-white/70 mb-1">Generated URL:</p>
+                  <code className="text-xs text-green-400 break-all whitespace-pre-wrap">
+                    {previewImage ? previewImage.split('?')[0] : 'No URL generated yet'}
+                  </code>
                 </div>
                 
                 <div className="flex items-center justify-between mt-4 space-x-3">
@@ -353,49 +360,56 @@ const HomePage = () => {
                       Optimize
                     </span>
                   </button>
-                  <button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={() => {
-                    // Cycle through focus points with visual feedback
-                    const current = focuses.indexOf(editorFocus);
-                    const next = (current + 1) % focuses.length;
-                    setEditorFocus(focuses[next]);
-                    
-                    // Add a small notification for user feedback
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed top-4 right-4 bg-purple-600 text-white px-4 py-2 rounded shadow-lg z-50';
-                    notification.innerHTML = `Focus changed to: ${focuses[next]}`;
-                    document.body.appendChild(notification);
-                    setTimeout(() => {
-                      notification.style.opacity = '0';
-                      notification.style.transition = 'opacity 0.5s';
-                      setTimeout(() => document.body.removeChild(notification), 500);
-                    }, 1500);
-                  }}>
+                  <button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={cycleFocus}>
                     <span className="flex items-center justify-center">
                       <Image size={12} className="mr-1" />
                       Transform
                     </span>
                   </button>
-                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={() => {
-                    // Toggle formats
-                    const current = formats.indexOf(editorFormat);
-                    const next = (current + 1) % formats.length;
-                    setEditorFormat(formats[next]);
-                  }}>
+                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={cycleFormat}>
                     <span className="flex items-center justify-center">
                       <Server size={12} className="mr-1" />
-                      Store
+                      Format
                     </span>
                   </button>
                   <button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={() => {
                     // Copy URL to clipboard
                     if (previewImage) {
                       navigator.clipboard.writeText(previewImage);
-                      alert('URL copied to clipboard!');
+                      alert('URL copied to clipboard: ' + previewImage);
                     }
                   }}>
                     <span className="flex items-center justify-center">
                       <Share size={12} className="mr-1" />
                       Share
+                    </span>
+                  </button>
+                </div>
+                
+                {/* Manual Refresh button */}
+                <div className="mt-3">
+                  <button 
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-2 rounded-lg transition-colors duration-300"
+                    onClick={() => {
+                      // Force a completely new URL generation with current settings
+                      const timestamp = Date.now();
+                      const randomId = Math.random().toString(36).substring(2, 8);
+                      const { cdn, hash } = getOMWizard();
+                      
+                      // Calculate current parameters
+                      const scaledWidth = Math.round(1000 * (editorWidth / 100));
+                      const scaledHeight = Math.round(1000 * (editorWidth / 100));
+                      
+                      // Create a completely new URL
+                      const refreshUrl = `https://${cdn}.i.optimole.com/${hash}/rs:fill:${scaledWidth}:${scaledHeight}/g:${focusMap[editorFocus]}/q:${editorQuality}/f:${formatMap[editorFormat]}/https://optimole.com/uploads/2020/07/fp.jpeg?refresh=${timestamp}-${randomId}`;
+                      
+                      setPreviewImage(refreshUrl);
+                      console.log("Manually refreshed URL:", refreshUrl);
+                    }}
+                  >
+                    <span className="flex items-center justify-center">
+                      <RefreshCw size={12} className="mr-1" />
+                      Refresh Image
                     </span>
                   </button>
                 </div>

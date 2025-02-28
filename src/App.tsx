@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import OptimolePricingRedesign from './components/OptimolePricingRedesign'
 import HomePage from './components/HomePage'
+import OptimoleAboutPage from './components/AboutPage'
+import OptimoleImageCompressor from './components/ImageCompression'
 import './App.css'
 
 // Create a type definition for Vite's import.meta
@@ -33,6 +35,9 @@ function AppLayout() {
             <div className="hidden md:flex items-center space-x-8">
               <Link to="/" className="text-gray-700 hover:text-blue-600 font-medium">
                 Home
+              </Link>
+              <Link to="/about" className="text-gray-700 hover:text-blue-600 font-medium">
+                About Us
               </Link>
               <Link to="/pricing" className="text-gray-700 hover:text-blue-600 font-medium">
                 Pricing
@@ -76,7 +81,9 @@ function AppLayout() {
       <main>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<OptimoleAboutPage />} />
           <Route path="/pricing" element={<OptimolePricingRedesign />} />
+          <Route path="/compress" element={<OptimoleImageCompressor />} />
         </Routes>
       </main>
 
@@ -94,7 +101,8 @@ function AppLayout() {
               <h3 className="text-white text-lg font-semibold mb-4">Product</h3>
               <ul className="space-y-2">
                 <li><a href="#" className="hover:text-white">Get Started</a></li>
-                <li><a href="#" className="hover:text-white">Pricing</a></li>
+                <li><Link to="/pricing" className="hover:text-white">Pricing</Link></li>
+                <li><Link to="/compress" className="hover:text-white">Image Compression Tool</Link></li>
                 <li><a href="#" className="hover:text-white">Digital Asset Management</a></li>
                 <li><a href="#" className="hover:text-white">Test Your Website</a></li>
               </ul>
@@ -110,7 +118,7 @@ function AppLayout() {
             <div>
               <h3 className="text-white text-lg font-semibold mb-4">Company</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white">About Us</a></li>
+                <li><Link to="/about" className="hover:text-white">About Us</Link></li>
                 <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
                 <li><a href="#" className="hover:text-white">Contact</a></li>
               </ul>
