@@ -3,6 +3,7 @@ import OptimolePricingRedesign from './components/OptimolePricingRedesign'
 import HomePage from './components/HomePage'
 import OptimoleAboutPage from './components/AboutPage'
 import OptimoleImageCompressor from './components/ImageCompression'
+import WPFullPaySettings from './components/WPFullPaySettings'
 import './App.css'
 
 // Create a type definition for Vite's import.meta
@@ -41,6 +42,9 @@ function AppLayout() {
               </Link>
               <Link to="/pricing" className="text-gray-700 hover:text-blue-600 font-medium">
                 Pricing
+              </Link>
+              <Link to="/wp-fullpay" className="text-gray-700 hover:text-blue-600 font-medium">
+                WP Full Pay
               </Link>
               <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">
                 WordPress
@@ -84,6 +88,7 @@ function AppLayout() {
           <Route path="/about" element={<OptimoleAboutPage />} />
           <Route path="/pricing" element={<OptimolePricingRedesign />} />
           <Route path="/compress" element={<OptimoleImageCompressor />} />
+          <Route path="/wp-fullpay" element={<WPFullPaySettings />} />
         </Routes>
       </main>
 
@@ -103,6 +108,7 @@ function AppLayout() {
                 <li><a href="#" className="hover:text-white">Get Started</a></li>
                 <li><Link to="/pricing" className="hover:text-white">Pricing</Link></li>
                 <li><Link to="/compress" className="hover:text-white">Image Compression Tool</Link></li>
+                <li><Link to="/wp-fullpay" className="hover:text-white">WP Full Pay Settings</Link></li>
                 <li><a href="#" className="hover:text-white">Digital Asset Management</a></li>
                 <li><a href="#" className="hover:text-white">Test Your Website</a></li>
               </ul>
