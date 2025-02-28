@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/ai-experiments/',
+  css: {
+    postcss: './postcss.config.cjs',
+    devSourcemap: true,
+  },
   server: {
     host: '0.0.0.0',
     hmr: {
