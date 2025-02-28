@@ -8,6 +8,8 @@ interface OptimoleImage {
   height: number;
   resizeType: string;
   gravity: string;
+  quality: number;
+  format: string;
   blur: number;
   sharpen: number;
   pixelate: number;
@@ -27,6 +29,8 @@ const OptimoleUrlBuilder: React.FC = () => {
     height: 600,
     resizeType: 'fill',
     gravity: 'center',
+    quality: 80,
+    format: 'auto',
     blur: 0,
     sharpen: 0,
     pixelate: 0,

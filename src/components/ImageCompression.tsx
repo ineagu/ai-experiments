@@ -1,15 +1,44 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+// Define interfaces for type safety
+interface ProcessedImage {
+  file: any;
+  optimoleUrl: string;
+  dataUrl: string;
+  originalUrl: string | ArrayBuffer | null;
+  originalSize: number;
+  compressedSize: number;
+  width: number;
+  height: number;
+  quality: number | string;
+  format: string;
+  downloadUrl?: string | null;
+  isUpdating?: boolean;
+  error?: boolean;
+  errorMessage?: string;
+}
+
+interface FallbackImage {
+  error: boolean;
+  errorMessage: string;
+  dataUrl: any;
+  downloadUrl: any;
+  originalUrl: any;
+  originalSize: number;
+  compressedSize: number;
+  file?: any;
+}
+
 const OptimoleImageCompressor = () => {
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<any[]>([]);
   const [compressionLevel, setCompressionLevel] = useState('medium');
   const [outputFormat, setOutputFormat] = useState('auto');
-  const [processedImages, setProcessedImages] = useState([]);
+  const [processedImages, setProcessedImages] = useState<ProcessedImage[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showFeatures, setShowFeatures] = useState(false);
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Clear error message when files change
   useEffect(() => {
@@ -19,7 +48,7 @@ const OptimoleImageCompressor = () => {
   }, [files]);
   
   // Handle file selection
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       if (!e.target.files || e.target.files.length === 0) {
         return;
@@ -34,7 +63,7 @@ const OptimoleImageCompressor = () => {
   };
   
   // Process files (filter and validate)
-  const processFiles = (selectedFiles) => {
+  const processFiles = (selectedFiles: File[]) => {
     try {
       // Filter valid files (image types and size limit)
       const validFiles = selectedFiles.filter(file => {
@@ -58,7 +87,7 @@ const OptimoleImageCompressor = () => {
   };
   
   // Drag and drop handlers
-  const handleDragOver = (e) => {
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
@@ -67,7 +96,7 @@ const OptimoleImageCompressor = () => {
     setIsDragging(false);
   };
   
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     
@@ -83,7 +112,7 @@ const OptimoleImageCompressor = () => {
   };
   
   // Remove file from list
-  const removeFile = (index) => {
+  const removeFile = (index: number) => {
     try {
       const newFiles = [...files];
       newFiles.splice(index, 1);
@@ -94,7 +123,7 @@ const OptimoleImageCompressor = () => {
   };
 
   // Create fallback for failed images
-  const createFallbackImage = (message) => {
+  const createFallbackImage = (message: string): FallbackImage => {
     return {
       error: true,
       errorMessage: message,
@@ -107,7 +136,7 @@ const OptimoleImageCompressor = () => {
   };
 
   // Create optimized image with Optimole URL
-  const createOptimoleUrl = (file, options = {}) => {
+  const createOptimoleUrl = (file: File, options: any = {}): Promise<ProcessedImage> => {
     return new Promise((resolve, reject) => {
       try {
         // Check for invalid inputs
@@ -137,7 +166,7 @@ const OptimoleImageCompressor = () => {
                 const settings = { ...defaults, ...options };
                 
                 // For quality, use mauto if set to auto
-                const qualityParam = settings.quality === 'auto' ? 'mauto' : settings.quality;
+                const qualityParam = settings.quality.toString() === 'auto' ? 'mauto' : settings.quality;
                 
                 // Random identifier for demo purposes
                 const randomId = Math.random().toString(36).substring(2, 8);
@@ -169,6 +198,9 @@ const OptimoleImageCompressor = () => {
                 canvas.width = canvasWidth;
                 canvas.height = canvasHeight;
                 const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                  throw new Error("Could not get canvas context");
+                }
                 ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
                 
                 // Determine output format
@@ -192,7 +224,7 @@ const OptimoleImageCompressor = () => {
                 const compressedSize = Math.round(originalSize * compressionFactor);
                 
                 // Create result object
-                const result = {
+                const result: ProcessedImage = {
                   file,
                   optimoleUrl,
                   dataUrl,
@@ -202,7 +234,8 @@ const OptimoleImageCompressor = () => {
                   width: img.width,
                   height: img.height,
                   quality: settings.quality,
-                  format: settings.format
+                  format: settings.format,
+                  downloadUrl: null
                 };
                 
                 // Try to create downloadable blob
@@ -238,7 +271,11 @@ const OptimoleImageCompressor = () => {
               reject(new Error("Failed to load image data"));
             };
             
-            img.src = reader.result;
+            if (reader.result && typeof reader.result === 'string') {
+              img.src = reader.result;
+            } else {
+              reject(new Error("Invalid reader result"));
+            }
           } catch (error) {
             console.error("Error after file read:", error);
             reject(error);
@@ -267,7 +304,7 @@ const OptimoleImageCompressor = () => {
     setIsProcessing(true);
     
     // Process files one by one rather than using Promise.all
-    const processNextFile = (index, results = []) => {
+    const processNextFile = (index: number, results: ProcessedImage[] = []) => {
       // If we've processed all files, we're done
       if (index >= files.length) {
         setProcessedImages(results);
@@ -296,8 +333,12 @@ const OptimoleImageCompressor = () => {
             failedResult.file = file;
             
             // Set error message but continue processing other files
-            setErrorMessage(`Error processing ${file.name}: ${error.message}`);
-            processNextFile(index + 1, [...results, failedResult]);
+            if (error instanceof Error) {
+              setErrorMessage(`Error processing ${file.name}: ${error.message}`);
+            } else {
+              setErrorMessage(`Error processing ${file.name}`);
+            }
+            processNextFile(index + 1, [...results, failedResult as unknown as ProcessedImage]);
           });
       }, 100);
     };
@@ -307,10 +348,11 @@ const OptimoleImageCompressor = () => {
   };
   
   // Update image with new settings
-  const updateImageSettings = (index, newSettings) => {
+  const updateImageSettings = (index: number, newSettings: any) => {
     try {
+      const currentImage = processedImages[index];
       // Cannot update an error image
-      if (processedImages[index].error) {
+      if (currentImage.error) {
         return;
       }
       
@@ -323,7 +365,7 @@ const OptimoleImageCompressor = () => {
       setProcessedImages(newProcessedImages);
       
       // Create a new Optimole URL with updated settings
-      createOptimoleUrl(processedImages[index].file, newSettings)
+      createOptimoleUrl(currentImage.file, newSettings)
         .then(updatedImage => {
           const updatedImages = [...processedImages];
           updatedImages[index] = {
@@ -352,7 +394,7 @@ const OptimoleImageCompressor = () => {
   };
   
   // Format file size for display
-  const formatFileSize = (bytes) => {
+  const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + ' B';
     else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
     else return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
@@ -367,7 +409,7 @@ const OptimoleImageCompressor = () => {
   };
 
   // Get settings description for display
-  const getOptimoleSettingsDescription = (quality, format) => {
+  const getOptimoleSettingsDescription = (quality: number | string, format: string) => {
     let qualityDesc = '';
     if (quality === 'auto' || quality === 'mauto') {
       qualityDesc = 'Auto quality';
@@ -624,7 +666,7 @@ const OptimoleImageCompressor = () => {
                           <div>
                             <p className="text-sm text-gray-500 mb-2">Original ({formatFileSize(img.originalSize)})</p>
                             <div className="border rounded-lg overflow-hidden bg-gray-50">
-                              {img.originalUrl ? (
+                              {img.originalUrl && typeof img.originalUrl === 'string' ? (
                                 <img src={img.originalUrl} alt="Original" className="w-full" />
                               ) : (
                                 <div className="w-full aspect-video flex items-center justify-center bg-gray-100 text-gray-500">
