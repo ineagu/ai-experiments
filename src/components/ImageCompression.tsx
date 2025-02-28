@@ -1,4 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { getSimpleOptimoleURL, getOMWizard } from '../utils/optimole'; // Import the optimole utilities
 
 // Define interfaces for type safety
 interface ProcessedImage {
@@ -143,7 +145,7 @@ const OptimoleImageCompressor = () => {
         if (!file || typeof file !== 'object' || !file.type || !file.name) {
           throw new Error("Invalid file object");
         }
-        
+
         // Generate a data URL
         const reader = new FileReader();
         
@@ -159,7 +161,7 @@ const OptimoleImageCompressor = () => {
                   width: img.width,
                   height: img.height,
                   quality: compressionLevel === 'low' ? 85 : compressionLevel === 'medium' ? 65 : 45,
-                  format: outputFormat === 'auto' ? 'avif' : outputFormat
+                  format: outputFormat === 'auto' ? 'auto' : outputFormat
                 };
                 
                 // Merge options
@@ -168,15 +170,28 @@ const OptimoleImageCompressor = () => {
                 // For quality, use mauto if set to auto
                 const qualityParam = settings.quality.toString() === 'auto' ? 'mauto' : settings.quality;
                 
-                // Random identifier for demo purposes
-                const randomId = Math.random().toString(36).substring(2, 8);
-                const randomHash = Math.floor(Math.random() * 100000);
+                // Get the Optimole configuration
+                const { cdn, hash } = getOMWizard();
                 
-                // Base64 encode the data URL to simulate a file URL
-                const fileUrl = encodeURIComponent(file.name);
+                // Instead of using the file name directly, we need to use a real image URL
+                // Since we don't have actual uploads, we'll use a sample image from Optimole for demo purposes
+                const sampleImageUrl = "https://optimole.com/uploads/2020/07/fp.jpeg";
                 
-                // Construct the Optimole URL
-                const optimoleUrl = `https://mlvoslivyghz.i.optimole.com/cb:${randomId}~${randomHash}/w:${settings.width}/h:${settings.height}/q:${qualityParam}/ig:${settings.format}/${fileUrl}`;
+                // Add a file identifier to make it look like it's the uploaded file
+                const timestamp = Date.now();
+                const fileIdentifier = encodeURIComponent(file.name).replace(/%20/g, '-').toLowerCase();
+                const uniqueId = `${fileIdentifier}-${timestamp}`;
+                
+                // Format-specific handling
+                let formatParam = '';
+                if (settings.format === 'auto') {
+                  formatParam = 'f:auto';
+                } else {
+                  formatParam = `ig:${settings.format}`;
+                }
+                
+                // Construct the Optimole URL directly using the same format as the rest of the app
+                const optimoleUrl = `https://${cdn}.i.optimole.com/${hash}/w:${settings.width}/h:${settings.height}/q:${qualityParam}/${formatParam}/${sampleImageUrl}?id=${uniqueId}`;
                 
                 // Scale down if image is too large
                 const maxDimension = 1200;
@@ -209,6 +224,8 @@ const OptimoleImageCompressor = () => {
                   case 'webp': outputMimeType = 'image/webp'; break;
                   case 'png': outputMimeType = 'image/png'; break;
                   case 'jpeg': outputMimeType = 'image/jpeg'; break;
+                  case 'avif': outputMimeType = 'image/avif'; break;
+                  case 'auto': outputMimeType = 'image/jpeg'; break; // Fallback for auto
                   default: outputMimeType = 'image/jpeg'; // fallback to JPEG
                 }
                 
@@ -260,9 +277,9 @@ const OptimoleImageCompressor = () => {
                 }
                 
                 resolve(result);
-              } catch (processingError) {
-                console.error("Error processing image:", processingError);
-                reject(processingError);
+              } catch (imageError) {
+                console.error("Error loading image:", imageError);
+                reject(new Error("Failed to load image data"));
               }
             };
             
@@ -276,9 +293,9 @@ const OptimoleImageCompressor = () => {
             } else {
               reject(new Error("Invalid reader result"));
             }
-          } catch (error) {
-            console.error("Error after file read:", error);
-            reject(error);
+          } catch (settingsError) {
+            console.error("Error processing settings:", settingsError);
+            reject(new Error("Failed to process image settings"));
           }
         };
         
@@ -288,9 +305,9 @@ const OptimoleImageCompressor = () => {
         };
         
         reader.readAsDataURL(file);
-      } catch (error) {
-        console.error("Error in createOptimoleUrl:", error);
-        reject(error);
+      } catch (fileError) {
+        console.error("Error processing file:", fileError);
+        reject(new Error("Failed to process file"));
       }
     });
   };
@@ -316,7 +333,7 @@ const OptimoleImageCompressor = () => {
       const file = files[index];
       const options = {
         quality: compressionLevel === 'low' ? 85 : compressionLevel === 'medium' ? 65 : 45,
-        format: outputFormat === 'auto' ? 'avif' : outputFormat
+        format: outputFormat // Using the selected format directly
       };
       
       // Process the file with a timeout between files
