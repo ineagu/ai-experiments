@@ -645,19 +645,22 @@ const WPFullPaySettings = () => {
     if (setting.id === 'forms') {
       return (
         <div className="p-6">
-          <div className="border-b mb-6">
-            <nav className="flex space-x-8">
-              {setting.tabs.map(tab => (
-                <button
-                  key={tab}
-                  className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </nav>
-          </div>
+          {/* Only show tab navigation if there's more than one tab */}
+          {setting.tabs && setting.tabs.length > 1 && (
+            <div className="border-b mb-6">
+              <nav className="flex space-x-8">
+                {setting.tabs.map(tab => (
+                  <button
+                    key={tab}
+                    className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
 
           {activeTab === 'options' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -737,19 +740,22 @@ const WPFullPaySettings = () => {
     if (setting.id === 'email') {
       return (
         <div className="p-6">
-          <div className="border-b mb-6">
-            <nav className="flex space-x-8">
-              {setting.tabs.map(tab => (
-                <button
-                  key={tab}
-                  className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </nav>
-          </div>
+          {/* Only show tab navigation if there's more than one tab */}
+          {setting.tabs && setting.tabs.length > 1 && (
+            <div className="border-b mb-6">
+              <nav className="flex space-x-8">
+                {setting.tabs.map(tab => (
+                  <button
+                    key={tab}
+                    className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
 
           {activeTab === 'options' && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -873,19 +879,22 @@ const WPFullPaySettings = () => {
     if (setting.id === 'stripe') {
       return (
         <div className="p-6">
-          <div className="border-b mb-6">
-            <nav className="flex space-x-8">
-              {setting.tabs.map(tab => (
-                <button
-                  key={tab}
-                  className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab === 'connection' ? 'Connection' : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </nav>
-          </div>
+          {/* Only show tab navigation if there's more than one tab */}
+          {setting.tabs && setting.tabs.length > 1 && (
+            <div className="border-b mb-6">
+              <nav className="flex space-x-8">
+                {setting.tabs.map(tab => (
+                  <button
+                    key={tab}
+                    className={`pb-2 px-1 font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab === 'connection' ? 'Connection' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          )}
 
           {activeTab === 'connection' && (
             <div>
