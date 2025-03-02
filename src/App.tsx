@@ -4,6 +4,7 @@ import HomePage from './components/HomePage'
 import OptimoleAboutPage from './components/AboutPage'
 import OptimoleImageCompressor from './components/ImageCompression'
 import WPFullPaySettings from './components/WPFullPaySettings'
+import ContactPage from './components/ContactPage'
 import './App.css'
 
 // Create a type definition for Vite's import.meta
@@ -42,6 +43,9 @@ function AppLayout() {
               </Link>
               <Link to="/pricing" className="text-gray-700 hover:text-blue-600 font-medium">
                 Pricing
+              </Link>
+              <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-medium">
+                Contact
               </Link>
               <Link to="/wp-fullpay" className="text-gray-700 hover:text-blue-600 font-medium">
                 WP Full Pay
@@ -89,6 +93,7 @@ function AppLayout() {
           <Route path="/pricing" element={<OptimolePricingRedesign />} />
           <Route path="/compress" element={<OptimoleImageCompressor />} />
           <Route path="/wp-fullpay" element={<WPFullPaySettings />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
 
@@ -126,7 +131,7 @@ function AppLayout() {
               <ul className="space-y-2">
                 <li><Link to="/about" className="hover:text-white">About Us</Link></li>
                 <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white">Contact</a></li>
+                <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
               </ul>
             </div>
           </div>
