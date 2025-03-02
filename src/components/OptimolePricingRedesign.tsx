@@ -19,7 +19,6 @@ const OptimolePricingRedesign = () => {
       popular: false,
       new: false,
       idealFor: "Bloggers, portfolios & small business sites",
-      videoSize: "50MB per video",
       emailSupport: "12-24h",
       liveChat: false,
       customDomain: false,
@@ -33,7 +32,6 @@ const OptimolePricingRedesign = () => {
       popular: true,
       new: false,
       idealFor: "Growing eCommerce stores & agency sites",
-      videoSize: "200MB per video",
       emailSupport: "12h",
       liveChat: true,
       customDomain: true,
@@ -47,11 +45,26 @@ const OptimolePricingRedesign = () => {
       popular: false,
       new: true,
       idealFor: "High-traffic sites, media-rich stores & membership sites",
-      videoSize: "500MB per video",
       emailSupport: "Priority",
       liveChat: true,
       customDomain: true,
       onboarding: "30-min call"
+    }
+  ];
+
+  // Add-ons
+  const addons = [
+    {
+      name: "Video Hosting",
+      yearlyPrice: "€15.83",
+      monthlyPrice: "€19",
+      description: "Optimize & transform videos in real-time",
+      features: [
+        "100GB bandwidth per month",
+        "Real-time video optimization",
+        "Video transformations API",
+        "Compatible with all plans"
+      ]
     }
   ];
 
@@ -395,10 +408,6 @@ const OptimolePricingRedesign = () => {
                       </div>
                       <div className="flex items-start">
                         <span className="text-green-500 mr-2">✓</span>
-                        <span className="font-medium text-indigo-600">Video Optimization ({plan.videoSize})</span>
-                      </div>
-                      <div className="flex items-start">
-                        <span className="text-green-500 mr-2">✓</span>
                         <span>Cloudfront CDN (450+ locations)</span>
                       </div>
                       <div className="flex items-start">
@@ -579,6 +588,90 @@ const OptimolePricingRedesign = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add-ons Section */}
+      <section className="py-12 px-4 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <div className="inline-block bg-indigo-100 text-indigo-700 text-sm font-medium px-3 py-1 rounded-full mb-3">ADD-ONS</div>
+            <h2 className="text-3xl font-bold text-indigo-900 mb-4">Extend Your Plan With Add-ons</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Customize your Optimole experience with these powerful add-ons, available with any plan
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            {addons.map((addon, index) => (
+              <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow">
+                <div className="p-6 border-b border-gray-100">
+                  <h3 className="text-xl font-bold text-indigo-900 mb-2">{addon.name}</h3>
+                  <p className="text-gray-600 text-sm mb-4">{addon.description}</p>
+                  
+                  <div className="flex items-baseline mb-4">
+                    <span className="text-3xl font-bold text-indigo-600">
+                      {isYearly ? addon.yearlyPrice : addon.monthlyPrice}
+                    </span>
+                    <span className="text-gray-500 ml-2">/ month</span>
+                  </div>
+                  
+                  {isYearly && (
+                    <div className="text-xs font-medium text-green-600 mb-4">
+                      Save €38.04/year
+                    </div>
+                  )}
+                  
+                  <a href="#" className="block text-center bg-indigo-600 text-white py-2 px-4 rounded font-medium hover:bg-indigo-700 transition-colors">
+                    Add to Your Plan
+                  </a>
+                </div>
+                
+                <div className="p-6">
+                  <div className="space-y-3">
+                    {addon.features.map((feature, i) => (
+                      <div key={i} className="flex items-start">
+                        <span className="text-green-500 mr-2">✓</span>
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg overflow-hidden text-white">
+              <div className="p-6 border-b border-indigo-400">
+                <h3 className="text-xl font-bold mb-2">Need a Custom Add-on?</h3>
+                <p className="text-indigo-100 text-sm mb-4">Looking for specific capabilities like more bandwidth, dedicated support, or custom integrations?</p>
+                
+                <a href="#" className="block text-center bg-white text-indigo-600 py-2 px-4 rounded font-medium hover:bg-indigo-50 transition-colors">
+                  Contact Sales
+                </a>
+              </div>
+              
+              <div className="p-6">
+                <div className="space-y-3">
+                  <div className="flex items-start">
+                    <span className="text-indigo-200 mr-2">✓</span>
+                    <span>Enterprise-grade SLAs</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-indigo-200 mr-2">✓</span>
+                    <span>Custom API access</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-indigo-200 mr-2">✓</span>
+                    <span>Advanced security features</span>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-indigo-200 mr-2">✓</span>
+                    <span>Volume discounts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       
       {/* FAQ Section */}
       <div className="py-16 px-4 bg-white">
