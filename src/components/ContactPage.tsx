@@ -40,18 +40,6 @@ const ContactPage = () => {
 
   return (
     <div className="bg-white font-sans">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex justify-center">
-            <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-indigo-600"></div>
-              <span className="ml-2 text-xl font-bold text-indigo-900">Optimole</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Hero Section */}
       <div className="text-center py-12 px-4 bg-indigo-50">
         <h1 className="text-4xl font-bold text-indigo-900 mb-4">Get in Touch</h1>
@@ -239,24 +227,6 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-      
-      {/* Footer */}
-      <footer className="bg-white py-12 px-4 border-t border-gray-100">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center flex-wrap gap-8 mb-8">
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">Home</a>
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">Pricing</a>
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">Support</a>
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">Privacy Policy</a>
-            <a href="#" className="text-gray-600 hover:text-indigo-600 transition-colors">Terms</a>
-          </div>
-          
-          <div className="text-center text-gray-500 text-sm">
-            Copyright © {new Date().getFullYear()} | All rights reserved | Vertigo Studio SA
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
