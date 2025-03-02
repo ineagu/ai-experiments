@@ -54,8 +54,6 @@ const ContactPage = () => {
           <div className="flex flex-col md:flex-row gap-12">
             {/* Left Side - Contact Info */}
             <div className="md:w-1/3">
-              <h2 className="text-2xl font-bold text-indigo-900 mb-6">We Welcome Your Feedback!</h2>
-              
               <p className="text-gray-600 mb-8">
                 We are here to answer any questions you may have. Our team will happily provide you with additional information about our services and features.
               </p>
