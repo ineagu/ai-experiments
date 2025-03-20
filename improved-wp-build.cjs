@@ -36,53 +36,52 @@ function buildWordPressPlugin() {
     execSync(`mkdir -p ${path.join(wpPluginDir, 'dist')}`, { stdio: 'inherit' });
     execSync(`cp -R ${path.join(distDir, '*')} ${path.join(wpPluginDir, 'dist/')}`, { stdio: 'inherit' });
     
-    // 3. Create the main.js file in assets/build/js
-    console.log('Creating main.js file...');
-    const mainJsDir = path.join(wpPluginDir, 'assets', 'build', 'js');
-    
-    console.log(`Main JS directory: ${mainJsDir}`);
-    
-    // Ensure directory exists
-    if (!fs.existsSync(mainJsDir)) {
-      console.log(`Creating directory: ${mainJsDir}`);
-      fs.mkdirSync(mainJsDir, { recursive: true });
+    // 3. Build WordPress-specific main.js file
+    console.log('Building WordPress-specific main.js...');
+    try {
+      // Build with WordPress-specific Vite config
+      execSync(`npx vite build --config vite.config.wordpress.js`, { stdio: 'inherit' });
+      console.log('Successfully built WordPress main.js');
+    } catch (error) {
+      console.error('Error building WordPress main.js:', error);
+      
+      // Fallback to copying the React app's index.js if WordPress build fails
+      console.log('Falling back to copying React index.js to main.js...');
+      const mainJsDir = path.join(wpPluginDir, 'assets', 'build', 'js');
+      
+      // Ensure directory exists
+      if (!fs.existsSync(mainJsDir)) {
+        fs.mkdirSync(mainJsDir, { recursive: true });
+      }
+      
+      // Find the main JS file from dist/assets
+      const assetsDir = path.join(distDir, 'assets');
+      const assetFiles = fs.readdirSync(assetsDir);
+      const indexJsFile = assetFiles.find(file => file.startsWith('index-') && file.endsWith('.js'));
+      
+      if (!indexJsFile) {
+        console.error('Could not find index JS file in dist/assets');
+        process.exit(1);
+      }
+      
+      // Copy the index JS file to main.js
+      const indexJsPath = path.join(distDir, 'assets', indexJsFile);
+      const mainJsPath = path.join(mainJsDir, 'main.js');
+      
+      fs.copyFileSync(indexJsPath, mainJsPath);
+      console.log(`Fallback: Copied ${indexJsFile} to assets/build/js/main.js`);
+      
+      // Create main.js.map file
+      const mainJsMapPath = path.join(mainJsDir, 'main.js.map');
+      fs.writeFileSync(mainJsMapPath, JSON.stringify({
+        version: 3,
+        file: "main.js",
+        sources: ["index.js"],
+        names: [],
+        mappings: ""
+      }));
+      console.log('Created main.js.map file');
     }
-    
-    // Find the main JS file from dist/assets
-    console.log('Finding index JS file...');
-    const assetsDir = path.join(distDir, 'assets');
-    console.log(`Assets directory: ${assetsDir}`);
-    
-    const assetFiles = fs.readdirSync(assetsDir);
-    console.log('Asset files:', assetFiles);
-    
-    const indexJsFile = assetFiles.find(file => file.startsWith('index-') && file.endsWith('.js'));
-    console.log(`Found index JS file: ${indexJsFile}`);
-    
-    if (!indexJsFile) {
-      console.error('Could not find index JS file in dist/assets');
-      process.exit(1);
-    }
-    
-    // Copy the index JS file to main.js
-    const indexJsPath = path.join(distDir, 'assets', indexJsFile);
-    const mainJsPath = path.join(mainJsDir, 'main.js');
-    
-    console.log(`Copying from ${indexJsPath} to ${mainJsPath}`);
-    fs.copyFileSync(indexJsPath, mainJsPath);
-    console.log(`Copied ${indexJsFile} to assets/build/js/main.js`);
-    
-    // Create main.js.map file
-    const mainJsMapPath = path.join(mainJsDir, 'main.js.map');
-    console.log(`Creating map file at ${mainJsMapPath}`);
-    fs.writeFileSync(mainJsMapPath, JSON.stringify({
-      version: 3,
-      file: "main.js",
-      sources: ["index.js"],
-      names: [],
-      mappings: ""
-    }));
-    console.log('Created main.js.map file');
     
     // 4. Create the plugin zip file
     console.log('Creating WordPress plugin ZIP file...');
@@ -100,6 +99,13 @@ function buildWordPressPlugin() {
     
     // Delete the root wordpress-plugin.zip if it exists
     checkUnnecessaryFile(path.join(__dirname, 'wordpress-plugin.zip'));
+    
+    // Clean up optimole-templates directory if it exists
+    const optimoleTemplatesDir = path.join(__dirname, 'optimole-templates');
+    if (fs.existsSync(optimoleTemplatesDir)) {
+      execSync(`rm -rf ${optimoleTemplatesDir}`, { stdio: 'inherit' });
+      console.log('Cleaned up optimole-templates directory');
+    }
     
     console.log('WordPress plugin build complete!');
   } catch (error) {
