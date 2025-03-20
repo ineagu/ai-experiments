@@ -11,22 +11,13 @@ const HomePage = () => {
   // Add states for editor widget interactivity
   const [editorWidth, setEditorWidth] = useState(75);
   const [editorQuality, setEditorQuality] = useState(80);
-  const [editorFormat, setEditorFormat] = useState('WebP (auto)');
   const [editorFocus, setEditorFocus] = useState('Smart');
   const [editorTab, setEditorTab] = useState('Media API');
   const [previewImage, setPreviewImage] = useState('');
   const [imageSize, setImageSize] = useState('200kb');
   const [sizeReduction, setSizeReduction] = useState(80);
   
-  // Create mappings for format and focus
-  const formatMap = {
-    'WebP (auto)': 'auto',
-    'JPEG': 'jpeg',
-    'PNG': 'png',
-    'GIF': 'gif',
-    'AVIF': 'avif'
-  };
-
+  // Create mapping for focus
   const focusMap = {
     'Smart': 'smart',
     'Center': 'center',
@@ -58,12 +49,8 @@ const HomePage = () => {
     // Quality affects file size (higher quality = larger file)
     const qualityFactor = editorQuality / 100;
     
-    // Format efficiency factors (how much each format reduces size)
-    const formatEfficiency = 
-      formatMap[editorFormat] === 'avif' ? 0.4 : 
-      formatMap[editorFormat] === 'auto' ? 0.5 : 
-      formatMap[editorFormat] === 'png' ? 0.9 :
-      formatMap[editorFormat] === 'gif' ? 0.7 : 0.7; // jpeg and others
+    // Fixed format efficiency for WebP (default)
+    const formatEfficiency = 0.5;
     
     // Dimension factor (smaller dimensions = smaller file)
     const dimensionFactor = (scaledWidth / 1000) * (scaledHeight / 1000);
@@ -75,7 +62,7 @@ const HomePage = () => {
     // Calculate size reduction percentage
     const reduction = Math.round((1 - (newSize / originalSize)) * 100);
     setSizeReduction(Math.max(20, Math.min(95, reduction)));
-  }, [editorWidth, editorQuality, editorFormat, editorFocus]);
+  }, [editorWidth, editorQuality, editorFocus]);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -110,32 +97,19 @@ const HomePage = () => {
     }
   ];
 
-  // Define formats and focus options for cycling through them
-  const formats = ['WebP (auto)', 'AVIF', 'JPEG', 'PNG'];
-  const focuses = ['Smart', 'Center', 'Top', 'Bottom', 'Left', 'Right'];
-  
-  // Handle width slider interaction - fixed to properly update the state
+  // Handle slider changes
   const handleWidthSliderChange = (e) => {
     const newWidth = parseInt(e.target.value, 10);
     setEditorWidth(newWidth);
     console.log("Width changed to:", newWidth);
   };
   
-  // Handle quality slider interaction - fixed to properly update the state
   const handleQualitySliderChange = (e) => {
     const newQuality = parseInt(e.target.value, 10);
     setEditorQuality(newQuality);
     console.log("Quality changed to:", newQuality);
   };
-
-  const cycleFormat = () => {
-    const formats = Object.keys(formatMap);
-    const currentIndex = formats.indexOf(editorFormat);
-    const nextIndex = (currentIndex + 1) % formats.length;
-    setEditorFormat(formats[nextIndex]);
-    console.log("Format changed to:", formats[nextIndex]);
-  };
-
+  
   const cycleFocus = () => {
     const focuses = Object.keys(focusMap);
     const currentIndex = focuses.indexOf(editorFocus);
@@ -165,25 +139,29 @@ const HomePage = () => {
             <div className="text-xs font-semibold">99.99% Uptime</div>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 flex items-center text-white hover:bg-white/30 transition-colors duration-300">
-            <Shield size={14} className="mr-2" />
+            <Zap size={14} className="mr-2" />
             <div className="text-xs font-semibold">Enterprise-ready</div>
           </div>
         </div>
         
+        {/* Hero Content Container */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
           <div className="flex flex-col md:flex-row items-center">
+            {/* Left Column - Text and CTA */}
             <div className="md:w-1/2 md:pr-8 mb-10 md:mb-0 text-white">
-              {/* Removed logo as requested */}
               <div className="inline-block px-3 py-1 bg-blue-500/30 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-4 hover:bg-blue-500/40 transition-colors duration-300">
                 Powering 200,000+ websites | Developed by Themeisle
               </div>
+              
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
                 Media Delivery & Management Platform
               </h1>
+              
               <p className="text-xl text-blue-100 mb-8 max-w-lg">
                 Complete media optimization, real-time transformations, and digital asset management for WordPress and beyond.
               </p>
               
+              {/* Features Grid */}
               <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8">
                 <div className="flex items-start">
                   <div className="mt-1 text-blue-300 mr-3">
@@ -226,6 +204,7 @@ const HomePage = () => {
                 </div>
               </div>
               
+              {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <a href="https://dashboard.optimole.com/register/" className="bg-white text-indigo-700 font-medium px-8 py-3 rounded-lg hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg text-center">
                   Try It Free
@@ -236,18 +215,21 @@ const HomePage = () => {
               </div>
             </div>
             
+            {/* Right Column - Interactive Demo */}
             <div className="md:w-1/2">
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm p-5 rounded-2xl shadow-2xl border border-white/20 hover:border-white/30 transition-colors duration-300">
+                {/* Image Preview Area */}
                 <div className="flex rounded-lg overflow-hidden mb-4 h-64 bg-white/10">
                   <div className="w-3/4 relative">
                     <img 
-                      src={previewImage || defaultPreviewImage}
+                      src={previewImage || defaultPreviewImage} 
                       alt="Preview" 
                       className="object-contain"
                       style={{ transition: "all 0.5s ease" }}
-                      key={previewImage}
+                      key={previewImage} // Force re-render when URL changes
                     />
                     
+                    {/* Processing badge */}
                     <div className="absolute top-3 left-3 bg-indigo-600/80 backdrop-blur-sm text-white py-1 px-2 rounded-full text-xs font-medium">
                       <span className="flex items-center">
                         <RefreshCw size={12} className="mr-1 animate-spin" />
@@ -255,6 +237,7 @@ const HomePage = () => {
                       </span>
                     </div>
                     
+                    {/* Focus point indicator */}
                     {editorFocus !== 'Smart' && (
                       <div className="absolute inset-0 pointer-events-none">
                         <div className={`
@@ -268,6 +251,7 @@ const HomePage = () => {
                       </div>
                     )}
                     
+                    {/* Size reduction badge */}
                     <div className="absolute bottom-3 right-3 bg-green-600/80 backdrop-blur-sm text-white py-1 px-2 rounded-full text-xs font-medium">
                       <span className="flex items-center">
                         {sizeReduction}% smaller • {imageSize}
@@ -275,6 +259,7 @@ const HomePage = () => {
                     </div>
                   </div>
                   
+                  {/* Controls panel */}
                   <div className="w-1/4 bg-white/5 border-l border-white/10 p-3">
                     <div className="mb-3">
                       <div className="text-xs text-white/70 mb-1 flex justify-between">
@@ -305,8 +290,6 @@ const HomePage = () => {
                         className="w-full h-1.5 rounded-full bg-white/20 appearance-none cursor-pointer"
                       />
                     </div>
-                    
-
                     
                     <div>
                       <div className="text-xs text-white/70 mb-1">Focus</div>
