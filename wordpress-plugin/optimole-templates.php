@@ -214,6 +214,8 @@ class Optimole_Templates {
             return 'dam';
         } elseif ($template === 'optimole-compare.php') {
             return 'compare';
+        } elseif ($template === 'optimole-imagekit.php') {
+            return 'imagekit';
         }
         
         return '';
@@ -239,6 +241,7 @@ class Optimole_Templates {
         $templates['optimole-wordpress.php'] = __('Optimole WordPress Plugin', 'optimole-templates');
         $templates['optimole-dam.php'] = __('Optimole Digital Asset Management', 'optimole-templates');
         $templates['optimole-compare.php'] = __('Optimole Comparison', 'optimole-templates');
+        $templates['optimole-imagekit.php'] = __('Optimole vs ImageKit', 'optimole-templates');
         
         return $templates;
     }
@@ -286,6 +289,9 @@ class Optimole_Templates {
         
         // Comparison shortcode
         add_shortcode('optimole_compare', array($this, 'compare_shortcode'));
+        
+        // ImageKit comparison shortcode
+        add_shortcode('optimole_imagekit', array($this, 'imagekit_shortcode'));
     }
 
     /**
@@ -607,6 +613,43 @@ class Optimole_Templates {
             });
             </script>
         </div>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * ImageKit comparison shortcode callback
+     */
+    public function imagekit_shortcode($atts) {
+        // Enqueue required assets
+        wp_enqueue_style(
+            'optimole-templates-frontend', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/css/main.css', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION
+        );
+
+        wp_enqueue_script(
+            'optimole-templates-react', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/js/main.js', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION, 
+            true
+        );
+
+        // Localize script
+        wp_localize_script('optimole-templates-react', 'optimoleTemplatesData', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('optimole_templates_nonce'),
+            'siteUrl' => site_url(),
+            'templateType' => 'imagekit',
+            'shortcode' => true
+        ));
+
+        // Start output
+        ob_start();
+        ?>
+        <div id="optimole-imagekit-root" class="optimole-component-container"></div>
         <?php
         return ob_get_clean();
     }

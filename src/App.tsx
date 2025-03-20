@@ -11,6 +11,7 @@ const ContactPage = lazy(() => import('./components/ContactPage'));
 const WordPressPluginPage = lazy(() => import('./components/WordPressPluginPage'));
 const DAMPage = lazy(() => import('./components/DAMPage'));
 const ComparisonPage = lazy(() => import('./components/ComparisonPage'));
+const ImageKitComparisonPage = lazy(() => import('./components/ImageKitComparisonPage'));
 
 // Create a type definition for Vite's import.meta
 declare global {
@@ -115,6 +116,7 @@ function AppLayout() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/dam" element={<DAMPage />} />
             <Route path="/compare" element={<ComparisonPage />} />
+            <Route path="/compare-imagekit" element={<ImageKitComparisonPage />} />
           </Routes>
         </Suspense>
       </main>

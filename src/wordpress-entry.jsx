@@ -7,6 +7,7 @@ import ContactPage from './components/ContactPage';
 import DAMPage from './components/DAMPage';
 import ComparisonPage from './components/ComparisonPage';
 import WordPressPluginPage from './components/WordPressPluginPage';
+import ImageKitComparisonPage from './components/ImageKitComparisonPage';
 import './index.css';
 
 // Log to check if the file is loaded
@@ -103,6 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
     ReactDOM.createRoot(wpRoot).render(
       <React.StrictMode>
         <WordPressPluginPage />
+      </React.StrictMode>
+    );
+  }
+
+  // ImageKit Comparison Page
+  const imagekitRoot = document.getElementById('optimole-imagekit-root');
+  console.log('ImageKit comparison root element:', imagekitRoot);
+  if (imagekitRoot && (templateType === 'imagekit' || !templateType)) {
+    console.log('Mounting ImageKit comparison component');
+    ReactDOM.createRoot(imagekitRoot).render(
+      <React.StrictMode>
+        <ImageKitComparisonPage />
       </React.StrictMode>
     );
   }
