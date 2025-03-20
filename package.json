@@ -12,7 +12,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "local-test": "node local-test.js",
-    "package": "rm -rf wordpress-plugin/dist && mkdir -p wordpress-plugin/dist && cp -R dist/* wordpress-plugin/dist/ && cd wordpress-plugin && zip -r optimole-plugin.zip ."
+    "package": "rm -rf wordpress-plugin/dist && mkdir -p wordpress-plugin/dist && cp -R dist/* wordpress-plugin/dist/ && cd wordpress-plugin && zip -r optimole-plugin.zip .",
+    "build-wp": "npm run build && node improved-wp-build.cjs"
   },
   "keywords": [],
   "author": "",

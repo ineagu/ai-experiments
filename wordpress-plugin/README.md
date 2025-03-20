@@ -57,6 +57,23 @@ To modify the plugin or develop new features:
 1. Clone the repository
 2. Run `npm install` to install dependencies
 3. Use `npm run dev` to start the development server
-4. Use `npm run build` followed by `npm run package` to create a new release
+4. Use `npm run build-wp` to create a new release with the latest code
 
-The packaging script ensures all components in the WordPress plugin use their latest versions.
+### Building and Packaging Process
+
+The WordPress plugin uses two key JavaScript files:
+
+1. The React application's JS files in `dist/assets/` (used for the web application)
+2. The WordPress-specific `assets/build/js/main.js` file (used by the WordPress plugin)
+
+To create an updated WordPress plugin with the latest code changes:
+
+1. Run `npm run build-wp` to:
+   - Compile the React application
+   - Copy the build files to the WordPress plugin directory
+   - Create the `assets/build/js/main.js` file from the latest React code
+   - Create the `optimole-plugin.zip` file containing all plugin files
+
+The improved build process ensures all components in the WordPress plugin use their latest versions by updating both the React application files and the WordPress-specific JavaScript files. The generated zip file can be found in the `wordpress-plugin` directory.
+
+**Note:** Always use `npm run build-wp` instead of just `npm run build` or `npm run package` to ensure all JavaScript files are properly updated.
