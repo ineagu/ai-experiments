@@ -10,7 +10,7 @@ get_header();
 
 <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-        <div id="optimole-wordpress-root" class="optimole-app optimole-component-container"></div>
+        <div id="optimole-wordpress-root" class="optimole-component-container"></div>
     </main><!-- #main -->
 </div><!-- #primary -->
 

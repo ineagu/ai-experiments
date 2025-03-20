@@ -65,9 +65,10 @@ get_header();
 }
 </style>
 
-<div id="primary" class="content-area">
+<div id="primary" class="content-area contact-page-wrapper">
     <main id="main" class="site-main" role="main">
-        <div id="optimole-contact-root" class="optimole-app optimole-component-container"></div>
+        <!-- Render the React App -->
+        <div id="optimole-contact-root" class="optimole-component-container"></div>
         
         <!-- Directly render the Gravity Form -->
         <div class="gravity-form-container">

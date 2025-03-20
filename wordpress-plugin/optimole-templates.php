@@ -137,141 +137,15 @@ class Optimole_Templates {
     }
 
     /**
-     * Load frontend assets for the React app
+     * Enqueue frontend assets
      */
-    public function frontend_assets($template_type = null) {
-        // Add inline style to fix conflicts
-        echo '<style>
-            /* Comprehensive reset for Optimole App container */
-            .optimole-app {
-                font-family: "Inter", sans-serif !important;
-                box-sizing: border-box !important;
-                color: #1A1B4B !important;
-                background-color: #ffffff !important;
-                /* Reset and isolate our container */
-                all: initial;
-                display: block;
-                margin: 0 !important;
-                padding: 0 !important;
-                max-width: 100% !important;
-                font-family: "Inter", sans-serif !important;
-            }
-            
-            /* Reset for all elements inside our app */
-            .optimole-app * {
-                box-sizing: border-box !important;
-                font-family: "Inter", sans-serif !important;
-            }
-            
-            /* Ensure images behave properly */
-            .optimole-app img {
-                max-width: 100% !important;
-                height: auto !important;
-                border: 0 !important;
-            }
-            
-            /* Reset headings */
-            .optimole-app h1, 
-            .optimole-app h2, 
-            .optimole-app h3, 
-            .optimole-app h4, 
-            .optimole-app h5, 
-            .optimole-app h6 {
-                font-family: "Inter", sans-serif !important;
-                font-weight: 700 !important;
-                color: #1A1B4B !important;
-                margin-top: 0 !important;
-                margin-bottom: 0.5em !important;
-                line-height: 1.2 !important;
-                letter-spacing: normal !important;
-                text-transform: none !important;
-            }
-            
-            /* Reset paragraphs */
-            .optimole-app p {
-                margin-top: 0 !important;
-                margin-bottom: 1rem !important;
-                line-height: 1.5 !important;
-                font-size: 1rem !important;
-                font-weight: 400 !important;
-            }
-            
-            /* Reset links */
-            .optimole-app a {
-                color: #4C45BE !important;
-                text-decoration: none !important;
-                background-color: transparent !important;
-                border: none !important;
-            }
-            
-            .optimole-app a:hover {
-                text-decoration: underline !important;
-                color: #3c37a1 !important;
-            }
-            
-            /* Reset buttons and form elements */
-            .optimole-app button,
-            .optimole-app input,
-            .optimole-app select,
-            .optimole-app textarea {
-                font-family: "Inter", sans-serif !important;
-                font-size: 1rem !important;
-                line-height: 1.5 !important;
-                margin: 0 !important;
-            }
-            
-            /* Reset for specific components */
-            .optimole-app .optml-btn-primary {
-                display: inline-block !important;
-                background-color: #4C45BE !important;
-                color: white !important;
-                font-weight: 600 !important;
-                padding: 0.75rem 1.5rem !important;
-                border-radius: 0.5rem !important;
-                border: none !important;
-                text-decoration: none !important;
-                cursor: pointer !important;
-                transition: background-color 0.15s ease-in-out !important;
-                line-height: 1.5 !important;
-                font-size: 1rem !important;
-                text-align: center !important;
-                box-shadow: none !important;
-                outline: none !important;
-                margin: 0 !important;
-            }
-            
-            .optimole-app .optml-btn-primary:hover {
-                background-color: #3c37a1 !important;
-                color: white !important;
-                text-decoration: none !important;
-            }
-            
-            /* Loading indicator */
-            .optimole-react-loading {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                min-height: 300px !important;
-                background-color: #ffffff !important;
-            }
-            
-            .optimole-spinner {
-                width: 40px !important;
-                height: 40px !important;
-                border: 3px solid rgba(76, 69, 190, 0.2) !important;
-                border-top-color: #4C45BE !important;
-                border-radius: 50% !important;
-                animation: optimole-spin 1s linear infinite !important;
-                margin-bottom: 1rem !important;
-            }
-            
-            @keyframes optimole-spin {
-                to { transform: rotate(360deg); }
-            }
-        </style>';
+    public function frontend_assets() {
+        // Only load on our template pages
+        if (!$this->is_optimole_template()) {
+            return;
+        }
 
-        // Enqueue required assets
+        // Enqueue React build files
         wp_enqueue_style(
             'optimole-templates-frontend', 
             OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/css/main.css', 
@@ -287,22 +161,21 @@ class Optimole_Templates {
             true
         );
 
-        // Localize script with data
-        $data = array(
+        // Localize script with template data
+        wp_localize_script('optimole-templates-react', 'optimoleTemplatesData', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('optimole_templates_nonce'),
-            'siteUrl' => site_url()
+            'siteUrl' => site_url(),
+            'templateType' => $this->get_current_template_type()
+        ));
+
+        // Add Tailwind CSS (in case it's not bundled)
+        wp_enqueue_style(
+            'optimole-tailwind',
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'css/tailwind.min.css',
+            array(),
+            OPTIMOLE_TEMPLATES_VERSION
         );
-
-        if ($template_type) {
-            $data['templateType'] = $template_type;
-            $data['shortcode'] = true;
-        } elseif ($this->is_optimole_template()) {
-            $data['templateType'] = $this->get_current_template_type();
-            $data['shortcode'] = false;
-        }
-
-        wp_localize_script('optimole-templates-react', 'optimoleTemplatesData', $data);
     }
 
     /**
@@ -425,32 +298,34 @@ class Optimole_Templates {
      * Home shortcode callback
      */
     public function home_shortcode($atts) {
-        // Parse attributes
-        $atts = shortcode_atts(array(
-            'class' => '',
-        ), $atts);
+        // Enqueue required assets
+        wp_enqueue_style(
+            'optimole-templates-frontend', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/css/main.css', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION
+        );
 
-        // Enqueue assets
-        $this->frontend_assets('home');
+        wp_enqueue_script(
+            'optimole-templates-react', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/js/main.js', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION, 
+            true
+        );
 
-        // Output container with React mounting point
+        // Localize script
+        wp_localize_script('optimole-templates-react', 'optimoleTemplatesData', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('optimole_templates_nonce'),
+            'siteUrl' => site_url(),
+            'templateType' => 'home',
+            'shortcode' => true
+        ));
+
         ob_start();
         ?>
-        <div class="optimole-app optimole-home-container <?php echo esc_attr($atts['class']); ?>" id="optimole-home-app">
-            <div class="optimole-react-loading">
-                <div class="optimole-spinner"></div>
-                <p>Loading Optimole Home Page...</p>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof optimoleRenderHome === 'function') {
-                    optimoleRenderHome('optimole-home-app');
-                } else {
-                    console.error('optimoleRenderHome function not found. Make sure the script is loaded correctly.');
-                }
-            });
-        </script>
+        <div id="optimole-home-root" class="optimole-component-container"></div>
         <?php
         return ob_get_clean();
     }
@@ -459,32 +334,34 @@ class Optimole_Templates {
      * WordPress plugin shortcode callback
      */
     public function wordpress_shortcode($atts) {
-        // Parse attributes
-        $atts = shortcode_atts(array(
-            'class' => '',
-        ), $atts);
+        // Enqueue required assets
+        wp_enqueue_style(
+            'optimole-templates-frontend', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/css/main.css', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION
+        );
 
-        // Enqueue assets
-        $this->frontend_assets('wordpress');
+        wp_enqueue_script(
+            'optimole-templates-react', 
+            OPTIMOLE_TEMPLATES_ASSETS_URL . 'build/js/main.js', 
+            array(), 
+            OPTIMOLE_TEMPLATES_VERSION, 
+            true
+        );
 
-        // Output container with React mounting point
+        // Localize script
+        wp_localize_script('optimole-templates-react', 'optimoleTemplatesData', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('optimole_templates_nonce'),
+            'siteUrl' => site_url(),
+            'templateType' => 'wordpress',
+            'shortcode' => true
+        ));
+
         ob_start();
         ?>
-        <div class="optimole-app optimole-wordpress-container <?php echo esc_attr($atts['class']); ?>" id="optimole-wordpress-app">
-            <div class="optimole-react-loading">
-                <div class="optimole-spinner"></div>
-                <p>Loading Optimole WordPress Plugin Page...</p>
-            </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof optimoleRenderWordPress === 'function') {
-                    optimoleRenderWordPress('optimole-wordpress-app');
-                } else {
-                    console.error('optimoleRenderWordPress function not found. Make sure the script is loaded correctly.');
-                }
-            });
-        </script>
+        <div id="optimole-wordpress-root" class="optimole-component-container"></div>
         <?php
         return ob_get_clean();
     }
