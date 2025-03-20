@@ -72,6 +72,7 @@ class Optimole_Templates_Loader {
                     <li><code>[optimole_wordpress]</code> - <?php _e('Displays the WordPress plugin page.', 'optimole-templates'); ?></li>
                     <li><code>[optimole_dam]</code> - <?php _e('Displays the Digital Asset Management page.', 'optimole-templates'); ?></li>
                     <li><code>[optimole_compare]</code> - <?php _e('Displays the comparison page.', 'optimole-templates'); ?></li>
+                    <li><code>[optimole_imagekit]</code> - <?php _e('Displays the Optimole vs ImageKit comparison page.', 'optimole-templates'); ?></li>
                 </ul>
             </div>
         </div>
@@ -115,6 +116,9 @@ class Optimole_Templates_Loader {
                 break;
             case 'compare':
                 $data = $this->get_comparison_data();
+                break;
+            case 'imagekit':
+                $data = $this->get_imagekit_data();
                 break;
             default:
                 $data = array();
@@ -240,35 +244,18 @@ class Optimole_Templates_Loader {
      */
     private function get_comparison_data() {
         return array(
-            'title' => __('Optimole vs Competition', 'optimole-templates'),
-            'description' => __('Compare Optimole with other image optimization solutions', 'optimole-templates'),
-            'content' => __('See how Optimole stacks up against other image optimization services.', 'optimole-templates'),
-            'competitors' => array(
-                array(
-                    'name' => 'ShortPixel',
-                    'features' => array(
-                        'cdn' => true,
-                        'lazy_load' => true,
-                        'adaptive_images' => false,
-                    ),
-                ),
-                array(
-                    'name' => 'Smush',
-                    'features' => array(
-                        'cdn' => false,
-                        'lazy_load' => true,
-                        'adaptive_images' => false,
-                    ),
-                ),
-                array(
-                    'name' => 'Imagify',
-                    'features' => array(
-                        'cdn' => false,
-                        'lazy_load' => false,
-                        'adaptive_images' => false,
-                    ),
-                ),
-            ),
+            'title' => __('Optimole vs ShortPixel', 'optimole-templates'),
+            'description' => __('Compare Optimole with ShortPixel to see which image optimization service is best for your needs.', 'optimole-templates'),
+        );
+    }
+
+    /**
+     * Get ImageKit comparison data
+     */
+    private function get_imagekit_data() {
+        return array(
+            'title' => __('Optimole vs ImageKit', 'optimole-templates'),
+            'description' => __('Compare Optimole with ImageKit to see which image optimization service is best for your needs.', 'optimole-templates'),
         );
     }
 }

@@ -6,30 +6,57 @@ const ImageKitComparisonPage: React.FC = () => {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-b from-indigo-100 to-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Let's compare Optimole with ImageKit</h1>
-            <p className="text-xl mb-8">
+      <section className="py-16 bg-gradient-to-r from-indigo-700 to-blue-600 relative overflow-hidden">
+        {/* Background pattern overlay */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '30px'
+        }}></div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
+              Let's compare Optimole with ImageKit
+            </h1>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
               Optimole is your all-in-one image optimization solution for WordPress & beyond. It processes your images in real-time and is fully cloud-based (it doesn't strain your server).
             </p>
-            <a href="/pricing" className="bg-indigo-600 text-white px-8 py-3 rounded-md font-medium hover:bg-indigo-700 transition duration-300">
-              Check pricing
-            </a>
-            
-            <div className="mt-12">
-              <p className="text-sm uppercase tracking-wider font-semibold mb-4">TRUSTED AND LOVED BY SATISFIED CUSTOMERS</p>
-              <div className="flex flex-wrap justify-center gap-8 mt-6 opacity-60">
-                {Array(10).fill(0).map((_, index) => (
-                  <div key={index} className="w-24 h-12 bg-gray-200 rounded flex items-center justify-center">
-                    <span className="text-gray-400">Company Logo</span>
-                  </div>
-                ))}
-              </div>
+            <div className="flex justify-center">
+              <a href="/pricing" className="bg-white text-indigo-700 font-medium px-8 py-3 rounded-lg hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg">
+                Check pricing
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Clients Section */}
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-gray-500 uppercase text-sm font-medium tracking-wider mb-8">TRUSTED AND LOVED BY SATISFIED CUSTOMERS</p>
+          
+          <div className="flex flex-wrap justify-center items-center gap-10">
+            <a href="https://www.bluehost.com/" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2024/01/bluehost-1.png" alt="Bluehost" className="h-8" />
+            </a>
+            <a href="https://themeisle.com" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2020/07/themeisle.png" alt="ThemeIsle" className="h-8" />
+            </a>
+            <a href="https://www.ninjaone.com/" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2024/01/ninja-one.png" alt="NinjaOne" className="h-8" />
+            </a>
+            <a href="https://wid.org/" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2024/01/WID.png" alt="WID" className="h-8" />
+            </a>
+            <a href="https://wpshout.com/" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2024/06/download.png" alt="WPShout" className="h-8" />
+            </a>
+            <a href="https://thrivethemes.com/" target="_blank" rel="noopener noreferrer" className="grayscale hover:grayscale-0 transition-all duration-300">
+              <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2024/01/Thrive_themes_.png" alt="Thrive Themes" className="h-8" />
+            </a>
+          </div>
+        </div>
+      </div>
 
       {/* At First Glance Section */}
       <section className="py-16">
