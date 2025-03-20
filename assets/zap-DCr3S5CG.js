@@ -1,4 +1,4 @@
-import{c as o}from"./createLucideIcon-MUaksZfk.js";
+import{c as o}from"./createLucideIcon-CD-e6kql.js";
 /**
  * @license lucide-react v0.344.0 - ISC
  *
