@@ -142,19 +142,35 @@ class Optimole_Templates {
     public function frontend_assets($template_type = null) {
         // Add inline style to fix conflicts
         echo '<style>
+            /* Comprehensive reset for Optimole App container */
             .optimole-app {
                 font-family: "Inter", sans-serif !important;
-                box-sizing: border-box;
+                box-sizing: border-box !important;
+                color: #1A1B4B !important;
+                background-color: #ffffff !important;
+                /* Reset and isolate our container */
+                all: initial;
+                display: block;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                font-family: "Inter", sans-serif !important;
             }
-            .optimole-app *,
-            .optimole-app *::before,
-            .optimole-app *::after {
-                box-sizing: border-box;
+            
+            /* Reset for all elements inside our app */
+            .optimole-app * {
+                box-sizing: border-box !important;
+                font-family: "Inter", sans-serif !important;
             }
+            
+            /* Ensure images behave properly */
             .optimole-app img {
-                max-width: 100%;
-                height: auto;
+                max-width: 100% !important;
+                height: auto !important;
+                border: 0 !important;
             }
+            
+            /* Reset headings */
             .optimole-app h1, 
             .optimole-app h2, 
             .optimole-app h3, 
@@ -162,28 +178,94 @@ class Optimole_Templates {
             .optimole-app h5, 
             .optimole-app h6 {
                 font-family: "Inter", sans-serif !important;
-                color: var(--dark-blue) !important;
+                font-weight: 700 !important;
+                color: #1A1B4B !important;
+                margin-top: 0 !important;
+                margin-bottom: 0.5em !important;
+                line-height: 1.2 !important;
+                letter-spacing: normal !important;
+                text-transform: none !important;
             }
+            
+            /* Reset paragraphs */
             .optimole-app p {
-                margin-top: 0;
-                margin-bottom: 1rem;
+                margin-top: 0 !important;
+                margin-bottom: 1rem !important;
+                line-height: 1.5 !important;
+                font-size: 1rem !important;
+                font-weight: 400 !important;
             }
+            
+            /* Reset links */
+            .optimole-app a {
+                color: #4C45BE !important;
+                text-decoration: none !important;
+                background-color: transparent !important;
+                border: none !important;
+            }
+            
+            .optimole-app a:hover {
+                text-decoration: underline !important;
+                color: #3c37a1 !important;
+            }
+            
+            /* Reset buttons and form elements */
+            .optimole-app button,
+            .optimole-app input,
+            .optimole-app select,
+            .optimole-app textarea {
+                font-family: "Inter", sans-serif !important;
+                font-size: 1rem !important;
+                line-height: 1.5 !important;
+                margin: 0 !important;
+            }
+            
+            /* Reset for specific components */
+            .optimole-app .optml-btn-primary {
+                display: inline-block !important;
+                background-color: #4C45BE !important;
+                color: white !important;
+                font-weight: 600 !important;
+                padding: 0.75rem 1.5rem !important;
+                border-radius: 0.5rem !important;
+                border: none !important;
+                text-decoration: none !important;
+                cursor: pointer !important;
+                transition: background-color 0.15s ease-in-out !important;
+                line-height: 1.5 !important;
+                font-size: 1rem !important;
+                text-align: center !important;
+                box-shadow: none !important;
+                outline: none !important;
+                margin: 0 !important;
+            }
+            
+            .optimole-app .optml-btn-primary:hover {
+                background-color: #3c37a1 !important;
+                color: white !important;
+                text-decoration: none !important;
+            }
+            
+            /* Loading indicator */
             .optimole-react-loading {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                min-height: 300px;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-height: 300px !important;
+                background-color: #ffffff !important;
             }
+            
             .optimole-spinner {
-                width: 40px;
-                height: 40px;
-                border: 3px solid rgba(76, 69, 190, 0.2);
-                border-top-color: #4C45BE;
-                border-radius: 50%;
-                animation: optimole-spin 1s linear infinite;
-                margin-bottom: 1rem;
+                width: 40px !important;
+                height: 40px !important;
+                border: 3px solid rgba(76, 69, 190, 0.2) !important;
+                border-top-color: #4C45BE !important;
+                border-radius: 50% !important;
+                animation: optimole-spin 1s linear infinite !important;
+                margin-bottom: 1rem !important;
             }
+            
             @keyframes optimole-spin {
                 to { transform: rotate(360deg); }
             }
