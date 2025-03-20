@@ -1,5 +1,7 @@
 import React, { memo, useMemo } from 'react';
 import { PricingCardProps } from '../../types/pricing';
+import Tooltip from '../common/Tooltip';
+import { tooltips } from '../../data/pricingData';
 
 /**
  * PricingCard component displays an individual pricing plan
@@ -61,8 +63,12 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, isYearly, index }) => {
         
         {/* Visitor Count */}
         <div className="flex justify-center items-center mt-4 bg-indigo-100 p-2 rounded">
-          <span className="text-xl font-bold text-indigo-600 mr-2">{plan.visits}</span>
-          <span className="text-sm">Visits Monthly</span>
+          <Tooltip content={tooltips.visits}>
+            <div>
+              <span className="text-xl font-bold text-indigo-600 mr-2">{plan.visits}</span>
+              <span className="text-sm">Visits Monthly</span>
+            </div>
+          </Tooltip>
         </div>
       </div>
       
@@ -82,15 +88,21 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, isYearly, index }) => {
             </div>
             <div className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>
-              <span>Image Offloading & Storage</span>
+              <Tooltip content={tooltips.imageOffloading}>
+                <span>Image Offloading & Storage</span>
+              </Tooltip>
             </div>
             <div className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>
-              <span>AI-Powered Auto Scaling</span>
+              <Tooltip content={tooltips.machineCompression}>
+                <span>AI-Powered Auto Scaling</span>
+              </Tooltip>
             </div>
             <div className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>
-              <span>Cloudfront CDN (450+ locations)</span>
+              <Tooltip content={tooltips.cdn}>
+                <span>Cloudfront CDN (450+ locations)</span>
+              </Tooltip>
             </div>
             <div className="flex items-start">
               <span className="text-green-500 mr-2">✓</span>
@@ -129,7 +141,11 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, isYearly, index }) => {
               ) : (
                 <span className="text-gray-400 mr-2">—</span>
               )}
-              <span className={plan.customDomain ? "" : "text-gray-500"}>Custom Domain (CNAME)</span>
+              <span className={plan.customDomain ? "" : "text-gray-500"}>
+                <Tooltip content={tooltips.cname}>
+                  Custom Domain (CNAME)
+                </Tooltip>
+              </span>
             </div>
           </div>
         </div>

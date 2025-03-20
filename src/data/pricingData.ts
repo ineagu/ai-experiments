@@ -245,8 +245,20 @@ export const testimonials: Testimonial[] = [
 ];
 
 /**
- * Tooltip content
+ * Tooltip contents
  */
 export const tooltips: Tooltips = {
-  autoScaling: "Optimole's auto-scaling automatically resizes images based on each visitor's device, screen size, and connection speed. This ensures optimal performance without manual work."
+  visits: "Each visitor is counted as a unique daily user, regardless of their actions or return frequency within 24 hours. <a href='https://docs.optimole.com/article/1134-how-optimole-counts-the-number-of-visitors' target='_blank' rel='noreferrer noopener'>Learn more</a>.",
+  unlimitedImages: "There's no cap on the number of images Optimole can process and store for your sites. Every image on your website can be optimized regardless of how many you have.",
+  unlimitedSites: "You can use your Optimole plan with as many WordPress websites as you need, making it perfect for agencies and developers with multiple sites.",
+  imageOffloading: "Optimize server space by migrating your images to Optimole Cloud. Easily transfer them back whenever needed without losing any quality or organization.",
+  avif: "AVIF provides better compression than WebP and JPEG, resulting in smaller file sizes without sacrificing quality. Optimole automatically delivers AVIF when the browser supports it.",
+  autoScaled: "Images are automatically resized to match the exact dimensions needed for each user's device and viewport, saving bandwidth and improving loading times without any manual configuration.",
+  machineCompression: "Optimole compresses images using Machine Learning algorithms to detect how to get the smallest possible file size with minimum perceived quality loss, ensuring optimal visual experience.",
+  lazyLoading: "Images are loaded only when they enter the viewport, improving initial page load speed and saving bandwidth. This helps improve Core Web Vitals scores and overall site performance.",
+  cdn: "Optimole's CDN is powered by Amazon CloudFront, with 450+ locations worldwide, ensuring lightning-fast image delivery and a smooth browsing experience for your visitors, no matter where they are.",
+  bandwidth: "Optimole doesn't restrict or charge for bandwidth usage, allowing your site to handle traffic spikes without unexpected costs or performance degradation.",
+  customDomain: "By default, all images are served using an Optimole subdomain. A custom domain allows you to use your domain name for CDN-served images, such as images.yoursubdomain.com, improving SEO and branding.",
+  onboarding: "Get personalized assistance from our team to kickstart your optimization journey. Once you purchase the plan, email us, and we will schedule the call to guide you through our 30-minute onboarding session.",
+  cname: "A Custom Domain (CNAME) setup allows you to serve optimized images from your own domain rather than Optimole's domain. This enhances branding, improves SEO, and provides a more professional appearance. <a href='https://docs.optimole.com/article/1177-how-to-set-up-a-custom-domain-cname' target='_blank' rel='noreferrer noopener'>Setup guide</a>."
 }; 

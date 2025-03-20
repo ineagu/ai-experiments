@@ -34,4 +34,61 @@ h1, h2, h3, h4, h5, h6 {
 
 .pricing-card {
   @apply bg-white rounded-2xl shadow-lg p-8 border border-gray-100;
+}
+
+/* Tooltip styles */
+.om-tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dotted #4f46e5;
+}
+
+.om-tooltip .om-tooltip-inner {
+  visibility: hidden;
+  width: 260px;
+  max-width: 100%;
+  background-color: #fff;
+  color: #333;
+  text-align: left;
+  border-radius: 6px;
+  padding: 8px 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid #e2e8f0;
+}
+
+.om-tooltip .om-tooltip-inner::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.om-tooltip .om-tooltip-inner.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.om-tooltip .om-tooltip-inner a {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .om-tooltip .om-tooltip-inner {
+    width: 240px;
+  }
 } 

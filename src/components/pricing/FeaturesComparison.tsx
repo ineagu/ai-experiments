@@ -1,6 +1,8 @@
 import React, { useState, useCallback, memo } from 'react';
 import { FeaturesComparisonProps } from '../../types/pricing';
 import { uiIcons } from '../../utils/icons';
+import Tooltip from '../common/Tooltip';
+import { tooltips } from '../../data/pricingData';
 
 /**
  * FeaturesComparison component displays the feature comparison table
@@ -25,6 +27,48 @@ const FeaturesComparison: React.FC<FeaturesComparisonProps> = ({
 
   const { ChevronUp, ChevronDown, Check } = uiIcons;
 
+  // Add tooltip for specific features only
+  const maybeAddTooltip = (featureName: string) => {
+    // Check for specific keywords that should have tooltips
+    if (featureName.toLowerCase().includes('visits')) {
+      return (
+        <Tooltip content={tooltips.visits}>
+          {featureName}
+        </Tooltip>
+      );
+    } else if (featureName.toLowerCase().includes('image offloading')) {
+      return (
+        <Tooltip content={tooltips.imageOffloading}>
+          {featureName}
+        </Tooltip>
+      );
+    } else if (featureName.toLowerCase().includes('ai-powered') || 
+               featureName.toLowerCase().includes('auto scaling')) {
+      return (
+        <Tooltip content={tooltips.machineCompression}>
+          {featureName}
+        </Tooltip>
+      );
+    } else if (featureName.toLowerCase().includes('custom domain') || 
+               featureName.toLowerCase().includes('cname')) {
+      return (
+        <Tooltip content={tooltips.cname}>
+          {featureName}
+        </Tooltip>
+      );
+    } else if (featureName.toLowerCase().includes('cloudfront') || 
+               featureName.toLowerCase().includes('cdn')) {
+      return (
+        <Tooltip content={tooltips.cdn}>
+          {featureName}
+        </Tooltip>
+      );
+    }
+    
+    // Return the feature name without a tooltip for all other features
+    return featureName;
+  };
+
   return (
     <>
       {/* Compare All Features Button */}
@@ -39,61 +83,64 @@ const FeaturesComparison: React.FC<FeaturesComparisonProps> = ({
       </div>
       
       {/* All Features Comparison */}
-      {showAllFeatures && (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-12">
-          <div className="p-4 bg-indigo-50 border-b border-gray-200">
-            <h3 className="font-bold text-indigo-900 text-lg">All Features Comparison</h3>
+      {showAllFeatures ? (
+        <div className="bg-white rounded-lg shadow-md p-6 mb-16">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">All Features Comparison</h3>
+          
+          {/* Feature Categories Tabs */}
+          <div className="flex flex-wrap justify-center mb-6 gap-2">
+            {featureCategories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => handleSetCategory(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium ${
+                  activeFeatureCategory === category.id
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {category.name}
+              </button>
+            ))}
           </div>
-          <div className="p-4">
-            {/* Feature Categories */}
-            <div className="flex flex-wrap border-b border-gray-200 mb-4">
-              {featureCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => handleSetCategory(category.id)}
-                  className={`px-4 py-2 mr-2 mb-2 rounded-t-lg transition-colors ${
-                    activeFeatureCategory === category.id
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-            
-            {/* Comparison Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left">
-                <thead>
-                  <tr className="bg-gray-50 border-b">
-                    <th className="py-3 px-4 font-semibold text-gray-900">Feature</th>
-                    <th className="py-3 px-4 font-semibold text-gray-900 text-center">Starter</th>
-                    <th className="py-3 px-4 font-semibold text-gray-900 text-center">Business</th>
-                    <th className="py-3 px-4 font-semibold text-gray-900 text-center">Growth</th>
+          
+          {/* Features Comparison Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-4 px-4 font-semibold text-gray-700 w-1/3">Feature</th>
+                  <th className="text-center py-4 px-4 font-semibold text-gray-700">Starter</th>
+                  <th className="text-center py-4 px-4 font-semibold text-indigo-700 bg-indigo-50 rounded-t-lg">Business</th>
+                  <th className="text-center py-4 px-4 font-semibold text-gray-700">Growth</th>
+                  <th className="text-center py-4 px-4 font-semibold text-gray-700">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody>
+                {features[activeFeatureCategory]?.map((feature, idx) => (
+                  <tr key={idx} className={idx % 2 === 0 ? 'bg-gray-50' : ''}>
+                    <td className="py-3 px-4 font-medium text-gray-700">
+                      {maybeAddTooltip(feature)}
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <Check className="w-5 h-5 mx-auto text-green-500" />
+                    </td>
+                    <td className="py-3 px-4 text-center bg-indigo-50">
+                      <Check className="w-5 h-5 mx-auto text-green-500" />
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <Check className="w-5 h-5 mx-auto text-green-500" />
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <Check className="w-5 h-5 mx-auto text-green-500" />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {features[activeFeatureCategory].map((feature, index) => (
-                    <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b`}>
-                      <td className="py-2 px-4 text-gray-800">{feature}</td>
-                      <td className="py-2 px-4 text-center">
-                        <Check size={18} className="text-green-500 inline-block" />
-                      </td>
-                      <td className="py-2 px-4 text-center">
-                        <Check size={18} className="text-green-500 inline-block" />
-                      </td>
-                      <td className="py-2 px-4 text-center">
-                        <Check size={18} className="text-green-500 inline-block" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 };

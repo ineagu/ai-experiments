@@ -55,18 +55,18 @@ optimole-templates/
 
 ### WordPress Plugin Installation
 
-1. Build the plugin:
+1. Build the plugin and create the WordPress plugin zip file in one step:
    ```bash
-   npm run build
+   npm run build-wp
    ```
    
-2. Package the WordPress plugin:
-   ```bash
-   npm run package
-   ```
-   This command will create a clean `wordpress-plugin/dist` directory with the latest built assets and generate `wordpress-plugin/optimole-plugin.zip`.
+   This command will:
+   - Build the React application
+   - Create WordPress-specific JavaScript files
+   - Copy all necessary files to the WordPress plugin directory
+   - Generate `wordpress-plugin/optimole-plugin.zip`
 
-3. Install the generated zip file through the WordPress admin interface:
+2. Install the generated zip file through the WordPress admin interface:
    - Navigate to Plugins → Add New → Upload Plugin
    - Select the `wordpress-plugin/optimole-plugin.zip` file
    - Activate the plugin
@@ -141,17 +141,25 @@ This allows for real-time transformations including:
 npm run dev
 ```
 
-### Production Build
+### Production React App Build
 
 ```bash
 npm run build
 ```
 
-### WordPress Plugin Package
+### WordPress Plugin Build
 
 ```bash
-npm run package
+npm run build-wp
 ```
+This creates both the React application build and the WordPress plugin zip file in one step.
+
+### Clean Temporary Files
+
+```bash
+npm run clean
+```
+Removes temporary build artifacts and directories.
 
 ## GitHub Pages Deployment
 
