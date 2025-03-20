@@ -73,6 +73,9 @@ function AppLayout() {
               <Link to="/compare" className="text-gray-700 hover:text-blue-600 font-medium">
                 VS ShortPixel
               </Link>
+              <Link to="/compare-imagekit" className="text-gray-700 hover:text-blue-600 font-medium">
+                VS ImageKit
+              </Link>
               <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-medium">
                 Contact
               </Link>
@@ -138,6 +141,8 @@ function AppLayout() {
                 <li><Link to="/pricing" className="hover:text-white">Pricing</Link></li>
                 <li><Link to="/wordpress" className="hover:text-white">WordPress Plugin</Link></li>
                 <li><Link to="/dam" className="hover:text-white">Digital Asset Management</Link></li>
+                <li><Link to="/compare" className="hover:text-white">VS ShortPixel</Link></li>
+                <li><Link to="/compare-imagekit" className="hover:text-white">VS ImageKit</Link></li>
               </ul>
             </div>
             <div>
