@@ -51,6 +51,7 @@ optimole-templates/
    ```bash
    npm run dev
    ```
+   The application will be available at http://localhost:5173/ai-experiments/
 
 ### WordPress Plugin Installation
 
@@ -63,6 +64,7 @@ optimole-templates/
    ```bash
    npm run package
    ```
+   This command will create a clean `wordpress-plugin/dist` directory with the latest built assets and generate `wordpress-plugin/optimole-plugin.zip`.
 
 3. Install the generated zip file through the WordPress admin interface:
    - Navigate to Plugins → Add New → Upload Plugin
@@ -84,6 +86,21 @@ The plugin uses the following integration points with WordPress:
 2. Create corresponding React components in `src/components/`
 3. Register the template in `optimole-templates.php`
 4. Update the React router in `App.tsx`
+
+## Optimole CDN Integration
+
+The application integrates with Optimole CDN for image optimization and delivery. The HomePage component uses the following URL format for image transformation:
+
+```javascript
+// Example URL construction in HomePage.tsx
+const imageUrl = `https://${cdn}.i.optimole.com/${hash}/w:${width}/h:${height}/q:${quality}/https://optimole.com/uploads/2020/07/fp.jpeg`;
+```
+
+This allows for real-time transformations including:
+- Width and height adjustments
+- Quality settings
+- Format selection
+- Smart cropping
 
 ## Maintenance Guide
 
@@ -107,6 +124,7 @@ The plugin uses the following integration points with WordPress:
 - Event handlers use useCallback to maintain referential equality
 - Code-splitting is implemented with React.lazy and Suspense
 - Images should include width and height attributes to prevent layout shifts
+- The Optimole CDN automatically serves optimized images in WebP or AVIF formats to supported browsers
 
 ### Security Best Practices
 
@@ -134,6 +152,12 @@ npm run build
 ```bash
 npm run package
 ```
+
+## GitHub Pages Deployment
+
+The project is configured for automatic deployment to GitHub Pages. When changes are pushed to the main branch, the application is built and deployed to GitHub Pages.
+
+Access the live demo at: https://ineagu.github.io/ai-experiments/
 
 ## License
 

@@ -1,1 +1,0 @@
-typeof window<"u"&&(window.OMWizard||(window.OMWizard={cdn:"mlvoslivyghz",hash:"cb:a7JM~41a03"}));const i=()=>typeof window<"u"?window.OMWizard:{cdn:"mlvoslivyghz",hash:"cb:a7JM~41a03"};export{i as g};
