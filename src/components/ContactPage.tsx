@@ -1,51 +1,27 @@
-import React, { useState } from 'react';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import React from 'react';
+import { Mail, MapPin, Building } from 'lucide-react';
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    website: '',
-    subject: '',
-    message: ''
-  });
-  
-  const [submitted, setSubmitted] = useState(false);
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Here you would normally send the data to your backend
-    setSubmitted(true);
-    // Reset form after submission
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        website: '',
-        subject: '',
-        message: ''
-      });
-      setSubmitted(false);
-    }, 3000);
-  };
-
   return (
     <div className="bg-white font-sans">
       {/* Hero Section */}
-      <div className="text-center py-12 px-4 bg-indigo-50">
-        <h1 className="text-4xl font-bold text-indigo-900 mb-4">Get in Touch</h1>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          We're here to answer your questions and help you get the most out of our services.
-        </p>
+      <div className="bg-gradient-to-r from-indigo-700 to-blue-600 relative overflow-hidden">
+        {/* Background pattern overlay */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '30px'
+        }}></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
+              Get in Touch
+            </h1>
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+              We're here to answer your questions and help you get the most out of our services.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Contact Section */}
@@ -62,36 +38,38 @@ const ContactPage = () => {
                 We are always looking to improve our content so we see your questions, suggestions, and feedback as an opportunity to do just that. Feel free to share your thoughts with us!
               </p>
               
-              {/* Contact Details */}
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <Mail className="text-indigo-600 mt-1 mr-3" size={20} />
+              {/* Company Address */}
+              <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
+                <h3 className="font-semibold text-gray-800 text-lg mb-3">Company Details</h3>
+                <div className="flex items-start mb-3">
+                  <Building className="text-indigo-600 mt-1 mr-3" size={20} />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Email Us</h3>
-                    <a href="mailto:support@optimole.com" className="text-indigo-600 hover:underline">support@optimole.com</a>
+                    <p className="text-gray-700 font-medium">Vertigo Studio SA</p>
                   </div>
                 </div>
-                
-                <div className="flex items-start">
-                  <Phone className="text-indigo-600 mt-1 mr-3" size={20} />
-                  <div>
-                    <h3 className="font-semibold text-gray-900">Call Us</h3>
-                    <a href="tel:+40721234567" className="text-indigo-600 hover:underline">+40 721 234 567</a>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
+                <div className="flex items-start mb-3">
                   <MapPin className="text-indigo-600 mt-1 mr-3" size={20} />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Visit Us</h3>
-                    <address className="not-italic text-gray-600">
-                      Vertigo Studio SA<br />
-                      20 Povernei Street<br />
-                      010641 Bucharest<br />
-                      Romania, European Union
-                    </address>
+                    <p className="text-gray-700">20 Povernei Street,</p>
+                    <p className="text-gray-700">010641 Bucharest,</p>
+                    <p className="text-gray-700">Romania</p>
                   </div>
                 </div>
+              </div>
+              
+              {/* Support Information */}
+              <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-100 mb-8">
+                <h3 className="font-semibold text-indigo-800 text-lg mb-3">Getting Support</h3>
+                <p className="text-gray-700 mb-4">
+                  Existing customers can access our support directly from their dashboard for the fastest response. We prioritize technical issues and aim to respond within 24 hours.
+                </p>
+                <div className="flex items-start mb-4">
+                  <Mail className="text-indigo-600 mt-1 mr-3" size={20} />
+                  <div>
+                    <p className="text-gray-700">For general inquiries, use the contact form on this page.</p>
+                  </div>
+                </div>
+                <a href="https://optimole.com/docs/" className="text-indigo-600 hover:text-indigo-800 font-medium">Browse our documentation →</a>
               </div>
               
               {/* Disclaimer Box */}
@@ -107,119 +85,10 @@ const ContactPage = () => {
               <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
                 <h2 className="text-2xl font-bold text-indigo-900 mb-6">Contact Form</h2>
                 
-                {submitted ? (
-                  <div className="bg-green-50 text-green-700 p-4 rounded-lg border border-green-200 mb-4">
-                    Thank you for your message! We'll get back to you as soon as possible.
-                  </div>
-                ) : null}
-                
-                <form onSubmit={handleSubmit}>
-                  <div className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-gray-700 mb-2">
-                        Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block text-gray-700 mb-2">
-                        Email <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="website" className="block text-gray-700 mb-2">
-                        Website
-                      </label>
-                      <input
-                        type="url"
-                        id="website"
-                        name="website"
-                        value={formData.website}
-                        onChange={handleChange}
-                        placeholder="https://"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="subject" className="block text-gray-700 mb-2">
-                        Subject <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="subject"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="message" className="block text-gray-700 mb-2">
-                        Full description of the issue/question <span className="text-red-500">*</span>
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={8}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                      ></textarea>
-                    </div>
-                    
-                    <div>
-                      <button 
-                        type="submit"
-                        className="bg-indigo-600 text-white py-3 px-6 rounded font-medium hover:bg-indigo-700 transition-colors flex items-center"
-                      >
-                        <Send size={18} className="mr-2" />
-                        Submit
-                      </button>
-                    </div>
-                    
-                    <p className="text-sm text-gray-500">
-                      Fields marked with <span className="text-red-500">*</span> are required.
-                    </p>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Google Map Section - Optional */}
-      <div className="bg-gray-100 py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="h-96 bg-gray-200 flex items-center justify-center">
-              {/* Replace this with an actual Google Maps embed */}
-              <div className="text-center p-4">
-                <p className="text-gray-500">Google Map would be embedded here</p>
-                <p className="text-sm text-gray-400">Showing Vertigo Studio SA location in Bucharest, Romania</p>
+                {/* Special marker for WordPress to replace */}
+                <div id="optimole-gravity-form-marker">
+                  {/* WordPress will render the form here */}
+                </div>
               </div>
             </div>
           </div>

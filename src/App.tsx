@@ -1,11 +1,16 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
-import OptimolePricingRedesign from './components/OptimolePricingRedesign'
-import HomePage from './components/HomePage'
-import OptimoleAboutPage from './components/AboutPage'
-import OptimoleImageCompressor from './components/ImageCompression'
-import WPFullPaySettings from './components/WPFullPaySettings'
-import ContactPage from './components/ContactPage'
+import { lazy, Suspense } from 'react';
 import './App.css'
+import ImageOptimizer from './components/common/ImageOptimizer';
+
+// Lazy load all page components for code splitting
+const OptimolePricingRedesign = lazy(() => import('./components/OptimolePricingRedesign'));
+const HomePage = lazy(() => import('./components/HomePage'));
+const OptimoleAboutPage = lazy(() => import('./components/AboutPage'));
+const ContactPage = lazy(() => import('./components/ContactPage'));
+const WordPressPluginPage = lazy(() => import('./components/WordPressPluginPage'));
+const DAMPage = lazy(() => import('./components/DAMPage'));
+const ComparisonPage = lazy(() => import('./components/ComparisonPage'));
 
 // Create a type definition for Vite's import.meta
 declare global {
@@ -17,6 +22,13 @@ declare global {
     };
   }
 }
+
+// Loading component to show while chunks are loading
+const LoadingFallback = () => (
+  <div className="flex justify-center items-center h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
+  </div>
+);
 
 // Create a layout component to handle conditional header rendering
 function AppLayout() {
@@ -31,7 +43,14 @@ function AppLayout() {
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div className="flex items-center">
               <Link to="/" className="flex items-center">
-                <img src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:168/h:48/q:mauto/ig:avif/https://optimole.com/uploads/2024/06/logo_mole.svg" alt="Optimole" className="h-8" />
+                <ImageOptimizer 
+                  src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:168/h:48/q:mauto/ig:avif/https://optimole.com/uploads/2024/06/logo_mole.svg" 
+                  alt="Optimole" 
+                  width={168}
+                  height={48}
+                  priority={true}
+                  className="h-8"
+                />
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -44,18 +63,18 @@ function AppLayout() {
               <Link to="/pricing" className="text-gray-700 hover:text-blue-600 font-medium">
                 Pricing
               </Link>
+              <Link to="/wordpress" className="text-gray-700 hover:text-blue-600 font-medium">
+                WordPress
+              </Link>
+              <Link to="/dam" className="text-gray-700 hover:text-blue-600 font-medium">
+                Digital Asset Management
+              </Link>
+              <Link to="/compare" className="text-gray-700 hover:text-blue-600 font-medium">
+                VS ShortPixel
+              </Link>
               <Link to="/contact" className="text-gray-700 hover:text-blue-600 font-medium">
                 Contact
               </Link>
-              <Link to="/wp-fullpay" className="text-gray-700 hover:text-blue-600 font-medium">
-                WP Full Pay
-              </Link>
-              <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">
-                WordPress
-              </a>
-              <a href="#" className="text-gray-700 hover:text-blue-600 font-medium">
-                Digital Asset Management
-              </a>
               <div className="relative group">
                 <button className="text-gray-700 hover:text-blue-600 font-medium flex items-center">
                   Guides
@@ -87,14 +106,17 @@ function AppLayout() {
 
       {/* Main Content */}
       <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<OptimoleAboutPage />} />
-          <Route path="/pricing" element={<OptimolePricingRedesign />} />
-          <Route path="/compress" element={<OptimoleImageCompressor />} />
-          <Route path="/wp-fullpay" element={<WPFullPaySettings />} />
-          <Route path="/contact" element={<ContactPage />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<OptimoleAboutPage />} />
+            <Route path="/pricing" element={<OptimolePricingRedesign />} />
+            <Route path="/wordpress" element={<WordPressPluginPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/dam" element={<DAMPage />} />
+            <Route path="/compare" element={<ComparisonPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* Footer */}
@@ -112,10 +134,8 @@ function AppLayout() {
               <ul className="space-y-2">
                 <li><a href="#" className="hover:text-white">Get Started</a></li>
                 <li><Link to="/pricing" className="hover:text-white">Pricing</Link></li>
-                <li><Link to="/compress" className="hover:text-white">Image Compression Tool</Link></li>
-                <li><Link to="/wp-fullpay" className="hover:text-white">WP Full Pay Settings</Link></li>
-                <li><a href="#" className="hover:text-white">Digital Asset Management</a></li>
-                <li><a href="#" className="hover:text-white">Test Your Website</a></li>
+                <li><Link to="/wordpress" className="hover:text-white">WordPress Plugin</Link></li>
+                <li><Link to="/dam" className="hover:text-white">Digital Asset Management</Link></li>
               </ul>
             </div>
             <div>

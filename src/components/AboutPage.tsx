@@ -6,14 +6,19 @@ const OptimoleAboutPage = () => {
   return (
     <div className="bg-light-gray font-sans">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-primary to-secondary overflow-hidden">
-        <div className="absolute inset-0 bg-pattern opacity-10"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <div className="bg-gradient-to-r from-indigo-700 to-blue-600 relative overflow-hidden">
+        {/* Background pattern overlay */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '30px'
+        }}></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <h1 className="text-4xl md:text-display font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
               Our Vision in Focus
             </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
               The story of how we're transforming the digital image landscape one pixel at a time
             </p>
           </div>
@@ -39,7 +44,7 @@ const OptimoleAboutPage = () => {
             </div>
             <div className="md:w-1/2 relative overflow-hidden">
               <img 
-                src="/ai-experiments/images/about/team-working.jpg" 
+                src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:1289/h:856/q:mauto/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/04/jeef-1.gif" 
                 alt="Optimole team at work" 
                 className="rounded-2xl shadow-card w-full max-h-[500px] object-contain"
                 style={{ objectPosition: 'center' }}
@@ -128,7 +133,7 @@ const OptimoleAboutPage = () => {
               <div className="relative overflow-hidden">
                 <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/10 rounded-full"></div>
                 <img 
-                  src="/ai-experiments/images/about/dashboard-evolution.jpg" 
+                  src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:701/h:468/q:mauto/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/04/WordCamp-Pune-with-the-Themeisle-Crew.jpg" 
                   alt="Optimole Dashboard Evolution" 
                   className="rounded-2xl shadow-card relative z-10 w-full max-h-[500px] object-contain"
                   style={{ objectPosition: 'center' }}
@@ -284,48 +289,48 @@ const OptimoleAboutPage = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="rounded-2xl overflow-hidden shadow-card bg-white text-center">
               <img 
-                src="/ai-experiments/images/about/team-member-1.jpg" 
-                alt="Team Member" 
+                src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:300/h:300/q:mauto/rt:fill/g:ce/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/04/Vertigo-studio-25.jpg" 
+                alt="Marius Cristea" 
                 className="w-full h-64 object-cover"
                 style={{ objectPosition: 'center top' }}
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold text-secondary mb-2">John Smith</h3>
+                <h3 className="text-xl font-bold text-secondary mb-2">Marius Cristea</h3>
                 <p className="text-primary mb-4">Product Lead</p>
                 <p className="text-text-gray">
-                  Leading product development with 10+ years of experience in web optimization technologies.
+                  Leading product development with extensive experience in WordPress technologies.
                 </p>
               </div>
             </div>
             
             <div className="rounded-2xl overflow-hidden shadow-card bg-white text-center">
               <img 
-                src="/ai-experiments/images/about/team-member-2.jpg" 
-                alt="Team Member" 
+                src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:320/h:320/q:mauto/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/05/ionut.jpg" 
+                alt="Ionut Neagu" 
                 className="w-full h-64 object-cover"
                 style={{ objectPosition: 'center top' }}
               />
               <div className="p-6">
-                <h3 className="text-xl font-bold text-secondary mb-2">Sara Johnson</h3>
+                <h3 className="text-xl font-bold text-secondary mb-2">Ionut Neagu</h3>
+                <p className="text-primary mb-4">CEO</p>
+                <p className="text-text-gray">
+                  Leading the company with vision and strategy for WordPress solutions.
+                </p>
+              </div>
+            </div>
+            
+            <div className="rounded-2xl overflow-hidden shadow-card bg-white text-center">
+              <img 
+                src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:320/h:320/q:mauto/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/04/Vertigo-studio-1.jpg" 
+                alt="Stefan Cotitosu" 
+                className="w-full h-64 object-cover"
+                style={{ objectPosition: 'center top' }}
+              />
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-secondary mb-2">Stefan Cotitosu</h3>
                 <p className="text-primary mb-4">Lead Developer</p>
                 <p className="text-text-gray">
                   Translating complex technical requirements into elegant, efficient code with a focus on performance.
-                </p>
-              </div>
-            </div>
-            
-            <div className="rounded-2xl overflow-hidden shadow-card bg-white text-center">
-              <img 
-                src="/ai-experiments/images/about/team-member-3.jpg" 
-                alt="Team Member" 
-                className="w-full h-64 object-cover"
-                style={{ objectPosition: 'center top' }}
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-secondary mb-2">Michael Chen</h3>
-                <p className="text-primary mb-4">Customer Success</p>
-                <p className="text-text-gray">
-                  Ensuring our customers get the most out of Optimole with responsive support and clear documentation.
                 </p>
               </div>
             </div>
@@ -337,11 +342,11 @@ const OptimoleAboutPage = () => {
             </p>
             <div className="inline-block">
               <img 
-                src="/api/placeholder/800/400" 
+                src="https://mllj2j8xvfl0.i.optimole.com/cb:3970~373ad/w:1024/h:628/q:mauto/f:best/ig:avif/https://themeisle.com/wp-content/uploads/2019/04/aboutimg3.jpg" 
                 alt="Optimole Team at WordCamp Europe" 
                 className="rounded-2xl shadow-card w-full max-w-[800px] h-auto"
               />
-              <p className="text-sm text-text-gray mt-4">Our team at WordCamp Europe, 2023</p>
+              <p className="text-sm text-text-gray mt-4">Our team at WordCamp Europe</p>
             </div>
           </div>
         </div>
@@ -393,8 +398,13 @@ const OptimoleAboutPage = () => {
       </div>
       
       {/* CTA */}
-      <div className="py-20 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
-        <div className="absolute inset-0 bg-pattern opacity-10"></div>
+      <div className="py-20 bg-gradient-to-r from-indigo-700 to-blue-600 relative overflow-hidden">
+        {/* Background pattern overlay */}
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundSize: '30px'
+        }}></div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Optimize Your Images Today</h2>
@@ -403,10 +413,10 @@ const OptimoleAboutPage = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <a href="#" className="bg-white text-primary font-medium px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors text-center shadow-md">
+              <a href="#" className="bg-white text-indigo-700 font-medium px-8 py-3 rounded-lg hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1 shadow-md hover:shadow-lg text-center">
                 Download Free Plugin
               </a>
-              <a href="#" className="border-2 border-white text-white font-medium px-8 py-3 rounded-lg hover:bg-white/10 transition-colors text-center">
+              <a href="#" className="border-2 border-white text-white font-medium px-8 py-3 rounded-lg hover:bg-white/10 transition-all duration-300 text-center">
                 View Pricing Plans
               </a>
             </div>

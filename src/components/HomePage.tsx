@@ -4,7 +4,7 @@ import OptimoleUrlBuilder from './OptimoleUrlBuilder';
 import { getOptimoleURL, getOMWizard } from '../utils/optimole';
 
 const HomePage = () => {
-  const [activeTab, setActiveTab] = useState('media-api');
+  const [activeTab, setActiveTab] = useState('wordpress');
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [counterValue, setCounterValue] = useState(7695501212);
   
@@ -41,13 +41,11 @@ const HomePage = () => {
     const scaledWidth = Math.round(1000 * (editorWidth / 100));
     const scaledHeight = Math.round(1000 * (editorWidth / 100));
     
-    // Create a direct URL with timestamp to completely bypass caching
-    const timestamp = Date.now();
-    const randomId = Math.random().toString(36).substring(2, 8);
+    // Get OMWizard values safely
     const { cdn, hash } = getOMWizard();
     
-    // Construct URL directly instead of using the utility
-    const newUrl = `https://${cdn}.i.optimole.com/${hash}/rs:fill:${scaledWidth}:${scaledHeight}/g:${focusMap[editorFocus]}/q:${editorQuality}/f:${formatMap[editorFormat]}/https://optimole.com/uploads/2020/07/fp.jpeg?bypass=${timestamp}-${randomId}`;
+    // Construct URL using the cb:a7JM~41a03 format with w/h/q parameters
+    const newUrl = `https://${cdn}.i.optimole.com/cb:a7JM~41a03/w:${scaledWidth}/h:${scaledHeight}/q:${editorQuality}/https://optimole.com/uploads/2020/07/fp.jpeg`;
     
     setPreviewImage(newUrl);
     
@@ -146,6 +144,10 @@ const HomePage = () => {
     console.log("Focus changed to:", focuses[nextIndex]);
   };
 
+  // Get OMWizard values safely for the preview image
+  const { cdn, hash } = getOMWizard();
+  const defaultPreviewImage = `https://${cdn}.i.optimole.com/cb:a7JM~41a03/w:800/h:800/q:85/https://optimole.com/uploads/2020/07/fp.jpeg`;
+
   return (
     <div className="bg-white font-sans">
       {/* Hero Section with enhanced background and pattern */}
@@ -173,7 +175,7 @@ const HomePage = () => {
             <div className="md:w-1/2 md:pr-8 mb-10 md:mb-0 text-white">
               {/* Removed logo as requested */}
               <div className="inline-block px-3 py-1 bg-blue-500/30 backdrop-blur-sm text-white rounded-full text-sm font-semibold mb-4 hover:bg-blue-500/40 transition-colors duration-300">
-                Powering 200,000+ websites | Developed by ThemeIsle
+                Powering 200,000+ websites | Developed by Themeisle
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
                 Media Delivery & Management Platform
@@ -236,25 +238,12 @@ const HomePage = () => {
             
             <div className="md:w-1/2">
               <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm p-5 rounded-2xl shadow-2xl border border-white/20 hover:border-white/30 transition-colors duration-300">
-                {/* Interactive Media Editor UI */}
-                <div className="flex mb-4 space-x-2">
-                  {['Media API', 'Asset Management', 'WordPress'].map((tab) => (
-                    <div 
-                      key={tab}
-                      onClick={() => setEditorTab(tab)}
-                      className={`flex-1 p-2 rounded-md ${editorTab === tab ? 'bg-white/20' : 'bg-white/10 hover:bg-white/15'} text-white text-sm text-center cursor-pointer transition-colors duration-300`}
-                    >
-                      {tab}
-                    </div>
-                  ))}
-                </div>
-                
                 <div className="flex rounded-lg overflow-hidden mb-4 h-64 bg-white/10">
                   <div className="w-3/4 relative">
                     <img 
-                      src={previewImage || `https://${getOMWizard().cdn}.i.optimole.com/${getOMWizard().hash}/rs:fill:800:800/g:smart/q:85/f:auto/https://optimole.com/uploads/2020/07/fp.jpeg`}
+                      src={previewImage || defaultPreviewImage}
                       alt="Preview" 
-                      className="w-full h-full object-cover"
+                      className="object-contain"
                       style={{ transition: "all 0.5s ease" }}
                       key={previewImage}
                     />
@@ -292,7 +281,6 @@ const HomePage = () => {
                         <span>Width</span>
                         <span>{editorWidth}%</span>
                       </div>
-                      {/* Fixed width slider to properly register changes */}
                       <input 
                         type="range" 
                         min="10" 
@@ -308,7 +296,6 @@ const HomePage = () => {
                         <span>Quality</span>
                         <span>{editorQuality}%</span>
                       </div>
-                      {/* Fixed quality slider to properly register changes */}
                       <input 
                         type="range" 
                         min="10" 
@@ -319,15 +306,7 @@ const HomePage = () => {
                       />
                     </div>
                     
-                    <div className="mb-3">
-                      <div className="text-xs text-white/70 mb-1">Format</div>
-                      <div 
-                        className="text-xs text-white bg-white/10 rounded p-1 text-center cursor-pointer hover:bg-white/15 transition-colors duration-300"
-                        onClick={cycleFormat}
-                      >
-                        {editorFormat}
-                      </div>
-                    </div>
+
                     
                     <div>
                       <div className="text-xs text-white/70 mb-1">Focus</div>
@@ -349,70 +328,18 @@ const HomePage = () => {
                   </code>
                 </div>
                 
-                <div className="flex items-center justify-between mt-4 space-x-3">
-                  <button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={() => {
-                    // Set optimal settings
-                    setEditorQuality(85);
-                    setEditorFormat('WebP (auto)');
-                  }}>
-                    <span className="flex items-center justify-center">
-                      <Zap size={12} className="mr-1" />
-                      Optimize
-                    </span>
-                  </button>
-                  <button className="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={cycleFocus}>
-                    <span className="flex items-center justify-center">
-                      <Image size={12} className="mr-1" />
-                      Transform
-                    </span>
-                  </button>
-                  <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={cycleFormat}>
-                    <span className="flex items-center justify-center">
-                      <Server size={12} className="mr-1" />
-                      Format
-                    </span>
-                  </button>
-                  <button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs py-2 rounded-lg transition-colors duration-300" onClick={() => {
-                    // Copy URL to clipboard
-                    if (previewImage) {
-                      navigator.clipboard.writeText(previewImage);
-                      alert('URL copied to clipboard: ' + previewImage);
-                    }
-                  }}>
-                    <span className="flex items-center justify-center">
-                      <Share size={12} className="mr-1" />
-                      Share
-                    </span>
-                  </button>
-                </div>
-                
-                {/* Manual Refresh button */}
-                <div className="mt-3">
-                  <button 
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs py-2 rounded-lg transition-colors duration-300"
-                    onClick={() => {
-                      // Force a completely new URL generation with current settings
-                      const timestamp = Date.now();
-                      const randomId = Math.random().toString(36).substring(2, 8);
-                      const { cdn, hash } = getOMWizard();
-                      
-                      // Calculate current parameters
-                      const scaledWidth = Math.round(1000 * (editorWidth / 100));
-                      const scaledHeight = Math.round(1000 * (editorWidth / 100));
-                      
-                      // Create a completely new URL
-                      const refreshUrl = `https://${cdn}.i.optimole.com/${hash}/rs:fill:${scaledWidth}:${scaledHeight}/g:${focusMap[editorFocus]}/q:${editorQuality}/f:${formatMap[editorFormat]}/https://optimole.com/uploads/2020/07/fp.jpeg?refresh=${timestamp}-${randomId}`;
-                      
-                      setPreviewImage(refreshUrl);
-                      console.log("Manually refreshed URL:", refreshUrl);
-                    }}
-                  >
-                    <span className="flex items-center justify-center">
-                      <RefreshCw size={12} className="mr-1" />
-                      Refresh Image
-                    </span>
-                  </button>
-                </div>
+                <button className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs py-2 rounded-lg transition-colors duration-300 w-full" onClick={() => {
+                  // Copy URL to clipboard
+                  if (previewImage) {
+                    navigator.clipboard.writeText(previewImage);
+                    alert('URL copied to clipboard: ' + previewImage);
+                  }
+                }}>
+                  <span className="flex items-center justify-center">
+                    <Share size={12} className="mr-1" />
+                    Share
+                  </span>
+                </button>
               </div>
             </div>
           </div>
@@ -459,6 +386,12 @@ const HomePage = () => {
           {/* Tabs */}
           <div className="flex justify-center mb-12 border-b border-gray-200 overflow-x-auto">
             <button 
+              onClick={() => setActiveTab('wordpress')}
+              className={`py-4 px-6 ${activeTab === 'wordpress' ? 'text-indigo-600 border-b-2 border-indigo-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
+            >
+              WordPress Integration
+            </button>
+            <button 
               onClick={() => setActiveTab('media-api')}
               className={`py-4 px-6 ${activeTab === 'media-api' ? 'text-indigo-600 border-b-2 border-indigo-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
             >
@@ -469,12 +402,6 @@ const HomePage = () => {
               className={`py-4 px-6 ${activeTab === 'asset-management' ? 'text-indigo-600 border-b-2 border-indigo-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
             >
               Digital Asset Management
-            </button>
-            <button 
-              onClick={() => setActiveTab('wordpress')}
-              className={`py-4 px-6 ${activeTab === 'wordpress' ? 'text-indigo-600 border-b-2 border-indigo-600 font-medium' : 'text-gray-500 hover:text-gray-700'}`}
-            >
-              WordPress Integration
             </button>
           </div>
           
@@ -783,11 +710,7 @@ const HomePage = () => {
               <div className="bg-gray-50 rounded-2xl p-8 shadow-lg relative overflow-hidden">
                 <div className="absolute top-0 right-0 bg-indigo-100 w-32 h-32 rounded-full -mr-16 -mt-16"></div>
                 <div className="relative">
-                  <img 
-                    src="https://mlvoslivyghz.i.optimole.com/cb:a7JM~41a03/w:auto/h:auto/q:mauto/https://optimole.com/uploads/2020/07/optimole-wordpress-dashboard.png" 
-                    alt="Optimole WordPress Dashboard" 
-                    className="rounded-lg shadow-lg mb-4"
-                  />
+                  {/* Removed broken image */}
                   
                   <div className="flex space-x-3 mb-4">
                     <div className="flex-1 bg-green-100 rounded-lg p-3 text-center">
