@@ -100,14 +100,11 @@ function buildWordPressPlugin() {
     // Delete the root wordpress-plugin.zip if it exists
     checkUnnecessaryFile(path.join(__dirname, 'wordpress-plugin.zip'));
     
-    // Clean up optimole-templates directory if it exists
-    const optimoleTemplatesDir = path.join(__dirname, 'optimole-templates');
-    if (fs.existsSync(optimoleTemplatesDir)) {
-      execSync(`rm -rf ${optimoleTemplatesDir}`, { stdio: 'inherit' });
-      console.log('Cleaned up optimole-templates directory');
-    }
-    
     console.log('WordPress plugin build complete!');
+    console.log('--------------------------------------');
+    console.log('IMPORTANT: Open your browser\'s developer console when testing the WordPress plugin.');
+    console.log('Look for logs starting with "WordPress entry file loaded" to debug any issues.');
+    console.log('--------------------------------------');
   } catch (error) {
     console.error('Error building WordPress plugin:', error);
     process.exit(1);
