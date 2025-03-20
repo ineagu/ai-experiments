@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import './App.css'
 import ImageOptimizer from './components/common/ImageOptimizer';
 
@@ -172,6 +172,10 @@ function AppLayout() {
 }
 
 function App() {
+  useEffect(() => {
+    document.title = 'AI Experiments - Optimole Pricing'
+  }, [])
+
   // Use basename in production but not in development
   const basename = import.meta.env.PROD ? '/ai-experiments' : '/';
   
