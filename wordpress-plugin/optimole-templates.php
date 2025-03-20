@@ -536,7 +536,8 @@ class Optimole_Templates {
             'nonce' => wp_create_nonce('optimole_templates_nonce'),
             'siteUrl' => site_url(),
             'templateType' => 'contact',
-            'shortcode' => true
+            'shortcode' => true,
+            'debug' => defined('WP_DEBUG') && WP_DEBUG ? true : false
         ));
 
         // Start output
@@ -552,34 +553,40 @@ class Optimole_Templates {
             display: none; /* Initially hidden */
         }
 
-        /* Styles to show form once page is loaded */
-        .optimole-contact-shortcode-wrapper.page-loaded .gravity-form-container {
-            display: block;
-            position: absolute;
-            top: 320px; /* Adjust based on your layout */
-            right: 0;
-            width: 66.66%; /* 2/3 width for the right column */
-            padding: 0 15px;
-            box-sizing: border-box;
-        }
-
-        .optimole-contact-shortcode-wrapper .gravity-form-container .gform_wrapper {
+        /* Styles for the form once moved to React component */
+        .optimole-contact-shortcode-wrapper #optimole-gravity-form-marker .gform_wrapper {
             background: white;
             border-radius: 0.5rem;
-            padding: 10px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 1.5rem;
         }
 
-        /* Hide the React form container */
+        /* Show the form marker to ensure it's available for the form to be moved into */
         .optimole-contact-shortcode-wrapper #optimole-gravity-form-marker {
-            display: none;
+            display: block;
+            min-height: 100px; /* Give it space to render initially */
         }
 
+        /* Fallback styles for when Gravity Forms isn't active */
+        .optimole-contact-shortcode-wrapper .wordpress-fallback .wp-msg {
+            padding: 8px;
+            margin-bottom: 12px;
+            background-color: #fff8e5;
+            border-left: 4px solid #ffb900;
+            color: #6d6d6d;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .optimole-contact-shortcode-wrapper .gravity-form-container {
                 position: static;
                 width: 100%;
                 margin-top: 30px;
+            }
+            
+            .optimole-contact-shortcode-wrapper #optimole-gravity-form-marker {
+                min-height: 350px; /* More space for mobile form */
             }
         }
         </style>
@@ -588,28 +595,68 @@ class Optimole_Templates {
             <!-- React component -->
             <div id="optimole-contact-root" class="optimole-component-container"></div>
             
-            <!-- Directly render the Gravity Form -->
+            <!-- Gravity Form container that will be moved to React component -->
             <div class="gravity-form-container">
                 <?php 
                 if (shortcode_exists('gravityform')) {
                     echo do_shortcode('[gravityform id="2" title="true"]');
                 } else {
-                    echo '<div class="p-4 bg-yellow-100 text-yellow-800 rounded">Gravity Forms plugin is not active.</div>';
+                    echo '<div class="wp-notice gform-inactive">Gravity Forms plugin is not active. Please install and activate the plugin.</div>';
                 }
                 ?>
             </div>
             
             <script>
-            // Simple script to mark the wrapper as loaded
+            // Enhanced script to ensure form works with React component - Vanilla JS version
             document.addEventListener('DOMContentLoaded', function() {
-                // Wait a bit for React to render
-                setTimeout(function() {
-                    // Find the closest wrapper (handles multiple shortcodes on page)
-                    var wrapper = document.querySelector('.optimole-contact-shortcode-wrapper:not(.page-loaded)');
-                    if (wrapper) {
-                        wrapper.classList.add('page-loaded');
+                console.log('Optimole Contact Shortcode: DOM Ready');
+                
+                // Function that attempts to initialize the form movement
+                function initContactForm() {
+                    var wrapper = document.querySelector('.optimole-contact-shortcode-wrapper');
+                    var formMarker = document.getElementById('optimole-gravity-form-marker');
+                    var formContainer = document.querySelector('.gravity-form-container');
+                    
+                    if (formMarker && formContainer) {
+                        console.log('Optimole: Found form marker and container, moving form');
+                        
+                        // Move the Gravity Form into the React component
+                        var formContent = formContainer.querySelector('.gform_wrapper') ? 
+                                          formContainer.querySelector('.gform_wrapper') : 
+                                          formContainer;
+                                          
+                        formMarker.innerHTML = '';
+                        formMarker.appendChild(formContent.cloneNode(true));
+                        formContainer.remove();
+                        
+                        // Reinitialize Gravity Forms if available
+                        if (typeof window.gform !== 'undefined' && typeof window.gform.initializeOnLoaded === 'function') {
+                            window.gform.initializeOnLoaded();
+                        }
+                        
+                        wrapper.classList.add('form-initialized');
+                        console.log('Optimole: Form successfully moved to React component');
+                        return true;
                     }
-                }, 500);
+                    
+                    console.log('Optimole: Form or marker not found yet');
+                    return false;
+                }
+                
+                // Try to initialize immediately
+                if (!initContactForm()) {
+                    // Retry after a delay
+                    setTimeout(initContactForm, 800);
+                    
+                    // Final attempt
+                    setTimeout(initContactForm, 2000);
+                }
+                
+                // Add loaded class to wrapper
+                var wrapperEl = document.querySelector('.optimole-contact-shortcode-wrapper');
+                if (wrapperEl) {
+                    wrapperEl.classList.add('page-loaded');
+                }
             });
             </script>
         </div>

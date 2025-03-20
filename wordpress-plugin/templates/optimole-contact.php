@@ -84,34 +84,172 @@ get_header();
 </div>
 
 <script>
-// Script to move the Gravity Form into the React component
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait for React to render (adjust timing if needed)
-    setTimeout(function() {
+// Enhanced script to move the Gravity Form into the React component
+(function() {
+    // Log for debugging
+    console.log('Optimole Contact Template: Script initialized');
+    
+    // Function to check if React component is ready
+    function checkReactReady() {
+        console.log('Checking if React component is ready...');
+        return document.getElementById('optimole-gravity-form-marker');
+    }
+    
+    // Function to find the Gravity Form
+    function findGravityForm() {
+        console.log('Looking for Gravity Form...');
+        // Try different selectors to find the form
         const formContainer = document.querySelector('.gravity-form-container');
-        const formTarget = document.getElementById('optimole-gravity-form-marker');
+        const gravityWrapper = document.querySelector('.gform_wrapper');
+        
+        // Return the first valid element found
+        if (formContainer && formContainer.querySelector('.gform_wrapper')) {
+            console.log('Found form in .gravity-form-container');
+            return {
+                container: formContainer,
+                form: formContainer.querySelector('.gform_wrapper')
+            };
+        } else if (gravityWrapper) {
+            console.log('Found direct .gform_wrapper');
+            return {
+                container: gravityWrapper.parentNode,
+                form: gravityWrapper
+            };
+        } else if (formContainer) {
+            console.log('Found container but no wrapper');
+            return {
+                container: formContainer,
+                form: formContainer
+            };
+        }
+        
+        console.warn('No Gravity Form found');
+        return null;
+    }
+    
+    // Function to move the form
+    function moveFormToReactComponent() {
+        const formTarget = checkReactReady();
+        const formData = findGravityForm();
         
         // Make sure both elements exist
-        if (formContainer && formTarget) {
-            // Move the form into the target div
-            formTarget.innerHTML = '';
-            formTarget.appendChild(formContainer.querySelector('.gform_wrapper') || formContainer);
-            
-            // Show the form (remove the display:none)
-            formTarget.style.display = 'block';
-            
-            // Remove the original container
-            formContainer.remove();
-            
-            console.log('Gravity Form moved to React component successfully');
+        if (formTarget && formData) {
+            try {
+                // Move the form into the target div
+                formTarget.innerHTML = '';
+                formTarget.appendChild(formData.form.cloneNode(true));
+                
+                // Show the form (remove the display:none)
+                formTarget.style.display = 'block';
+                
+                // Remove the original container
+                if (formData.container && formData.container.parentNode) {
+                    formData.container.remove();
+                }
+                
+                console.log('Gravity Form moved to React component successfully');
+                
+                // Initialize any Gravity Form scripts that might need to be reinitialized
+                if (window.gform && typeof window.gform.initializeOnLoaded === 'function') {
+                    window.gform.initializeOnLoaded();
+                }
+            } catch (error) {
+                console.error('Error moving Gravity Form:', error);
+            }
         } else {
             console.error('Could not find the form container or target element');
+            
+            // Fallback for when target exists but no form found
+            if (formTarget && !formData) {
+                console.log('Creating fallback form for WordPress');
+                formTarget.innerHTML = `
+                    <div class="gform_wrapper wordpress-fallback">
+                        <form id="mock-gravity-form" class="mock-form">
+                            <div class="gform_body">
+                                <div class="gform_fields">
+                                    <div class="gfield">
+                                        <label class="gfield_label">Name</label>
+                                        <div class="ginput_container">
+                                            <input type="text" name="input_name" placeholder="Your name">
+                                        </div>
+                                    </div>
+                                    <div class="gfield">
+                                        <label class="gfield_label">Email</label>
+                                        <div class="ginput_container">
+                                            <input type="email" name="input_email" placeholder="Your email">
+                                        </div>
+                                    </div>
+                                    <div class="gfield">
+                                        <label class="gfield_label">Message</label>
+                                        <div class="ginput_container">
+                                            <textarea name="input_message" placeholder="Your message"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gform_footer">
+                                <div class="wp-msg">Please activate Gravity Forms plugin for functional contact form</div>
+                                <button type="button" class="gform_button button">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                formTarget.style.display = 'block';
+                
+                // Add message styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    .wordpress-fallback .wp-msg {
+                        padding: 8px;
+                        margin-bottom: 12px;
+                        background-color: #fff8e5;
+                        border-left: 4px solid #ffb900;
+                        color: #6d6d6d;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
         
         // Add class to mark page as loaded
-        document.querySelector('.contact-page-wrapper').classList.add('page-loaded');
-    }, 800); // Increased timeout to ensure React has fully rendered
-});
+        const wrapper = document.querySelector('.contact-page-wrapper');
+        if (wrapper) {
+            wrapper.classList.add('page-loaded');
+        }
+    }
+    
+    // Function to handle initialization
+    function init() {
+        // Try immediately if form elements might already be available
+        if (checkReactReady()) {
+            moveFormToReactComponent();
+        } else {
+            // Use both DOMContentLoaded and window.onload for better coverage
+            // WordPress may load things in different orders
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    // First attempt after DOM is ready
+                    setTimeout(moveFormToReactComponent, 100);
+                });
+            } else {
+                // DOM already loaded, try with a small delay
+                setTimeout(moveFormToReactComponent, 100);
+            }
+            
+            // Second attempt after window fully loaded (images, etc.)
+            window.addEventListener('load', function() {
+                setTimeout(moveFormToReactComponent, 800);
+            });
+            
+            // Final fallback attempt
+            setTimeout(moveFormToReactComponent, 2000);
+        }
+    }
+    
+    // Start initialization
+    init();
+})();
 </script>
 
 <?php
