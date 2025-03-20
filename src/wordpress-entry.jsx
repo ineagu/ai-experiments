@@ -13,6 +13,120 @@ import './index.css';
 // Log to check if the file is loaded
 console.log('WordPress entry file loaded');
 
+// Define global render functions for each component
+// These functions can be called from shortcodes
+window.optimoleRenderPricing = function(containerId) {
+  console.log(`Rendering pricing component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <OptimolePricingRedesign />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for pricing component`);
+  }
+};
+
+window.optimoleRenderHome = function(containerId) {
+  console.log(`Rendering home component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <HomePage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for home component`);
+  }
+};
+
+window.optimoleRenderAbout = function(containerId) {
+  console.log(`Rendering about component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <OptimoleAboutPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for about component`);
+  }
+};
+
+window.optimoleRenderCompare = function(containerId) {
+  console.log(`Rendering compare component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <ComparisonPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for compare component`);
+  }
+};
+
+window.optimoleRenderContact = function(containerId) {
+  console.log(`Rendering contact component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <ContactPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for contact component`);
+  }
+};
+
+window.optimoleRenderDAM = function(containerId) {
+  console.log(`Rendering DAM component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <DAMPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for DAM component`);
+  }
+};
+
+window.optimoleRenderWordPress = function(containerId) {
+  console.log(`Rendering WordPress component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <WordPressPluginPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for WordPress component`);
+  }
+};
+
+window.optimoleRenderImageKit = function(containerId) {
+  console.log(`Rendering ImageKit component in #${containerId}`);
+  const container = document.getElementById(containerId);
+  if (container) {
+    ReactDOM.createRoot(container).render(
+      <React.StrictMode>
+        <ImageKitComparisonPage />
+      </React.StrictMode>
+    );
+  } else {
+    console.error(`Container #${containerId} not found for ImageKit component`);
+  }
+};
+
 // Get template data from WordPress
 const templateData = window.optimoleTemplatesData || {};
 const templateType = templateData.templateType || '';
