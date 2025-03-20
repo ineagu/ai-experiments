@@ -30,7 +30,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, isYearly, index }) => {
 
   return (
     <div 
-      className={`bg-white rounded-lg shadow-lg overflow-hidden border ${plan.popular ? 'border-indigo-500' : 'border-gray-100'} w-full max-w-sm lg:max-w-none flex-1 transition-all hover:shadow-xl ${plan.popular ? 'lg:scale-105 z-10' : ''}`}
+      className={`optml-pricing-card bg-white rounded-lg shadow-lg overflow-hidden border ${plan.popular ? 'border-indigo-500' : 'border-gray-100'} w-full max-w-sm lg:max-w-none flex-1 transition-all hover:shadow-xl ${plan.popular ? 'lg:scale-105 z-10' : ''}`}
     >
       {/* Card Header */}
       <div className={`relative ${plan.popular ? 'bg-indigo-100' : 'bg-indigo-50'} p-6 text-center`}>
@@ -74,9 +74,7 @@ const PricingCard: React.FC<PricingCardProps> = ({ plan, isYearly, index }) => {
       
       {/* Card Body */}
       <div className="p-6 flex flex-col">
-        <a href="#" className={`${plan.popular ? 'bg-indigo-700' : 'bg-indigo-600'} text-white text-center py-3 px-4 rounded font-medium hover:bg-indigo-700 transition-colors mb-6`}>
-          Get Started
-        </a>
+        <button className="optml-btn-primary w-full mb-6">Get Started</button>
         
         {/* Core Features */}
         <div className="mb-6">

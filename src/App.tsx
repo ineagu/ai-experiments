@@ -34,12 +34,35 @@ const LoadingFallback = () => (
 // Create a layout component to handle conditional header rendering
 function AppLayout() {
   const location = useLocation();
-  const isPricingPage = location.pathname === '/pricing' || location.pathname === '/ai-experiments/pricing';
+  // If a route has a trailing slash, remove it
+  const path = location.pathname.endsWith('/') && location.pathname !== '/' 
+    ? location.pathname.slice(0, -1) 
+    : location.pathname;
+
+  // Get base path for GitHub Pages or development
+  const getBasePath = () => {
+    if (import.meta.env.MODE === 'production') {
+      return '/ai-experiments';
+    }
+    return '';
+  };
+
+  const basePath = getBasePath();
   
+  // Only show navigation if not on a specific page
+  const hideNavigation = 
+    path === `${basePath}/wordpress-plugin` || 
+    path === `${basePath}/pricing-wp` || 
+    path === `${basePath}/about-wp` || 
+    path === `${basePath}/contact-wp` || 
+    path === `${basePath}/home-wp` ||
+    path === `${basePath}/dam-wp` ||
+    path === `${basePath}/compare-wp` ||
+    path === `${basePath}/imagekit-wp`;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation Header - Hidden on pricing page */}
-      {!isPricingPage && (
+    <div className="optimole-app min-h-screen bg-gray-50">
+      {!hideNavigation && (
         <header className="bg-white shadow-sm">
           <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div className="flex items-center">
