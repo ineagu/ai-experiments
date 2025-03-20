@@ -1,4 +1,4 @@
-import{j as e}from"./index-CYdEumvb.js";import{c as s}from"./createLucideIcon-I_Laiwn4.js";
+import{j as e}from"./index-CzDAykej.js";import{c as s}from"./createLucideIcon-6WWFL5Ms.js";
 /**
  * @license lucide-react v0.344.0 - ISC
  *
