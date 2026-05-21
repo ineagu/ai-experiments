@@ -64,11 +64,11 @@ def slide_title():
     add_text(s, Inches(0.9), Inches(1.0), Inches(2), Inches(0.4),
              "EO FORUM", 12, bold=True, color=MUTED)
     add_text(s, Inches(0.9), Inches(2.4), Inches(11.5), Inches(2),
-             "5 best.", 96, bold=True, color=INK)
-    add_text(s, Inches(0.9), Inches(3.7), Inches(11.5), Inches(2),
-             "5 worst.", 96, bold=True, color=ACCENT_BAD)
-    add_text(s, Inches(0.9), Inches(5.6), Inches(11.5), Inches(0.5),
-             "Decisions I made running my companies.", 18, color=MUTED)
+             "Best.", 110, bold=True, color=INK)
+    add_text(s, Inches(0.9), Inches(3.9), Inches(11.5), Inches(2),
+             "Worst.", 110, bold=True, color=ACCENT_BAD)
+    add_text(s, Inches(0.9), Inches(5.8), Inches(11.5), Inches(0.5),
+             "A few decisions, looking back.", 18, color=MUTED)
     add_rule(s, Inches(0.9), Inches(6.4), Inches(2), color=INK, weight=2)
 
 
@@ -222,7 +222,7 @@ slide_decision(
 slide_mirror()
 slide_close()
 
-out = "/home/user/ai-experiments/EO_Forum_5_Best_5_Worst.pptx"
+out = "/home/user/ai-experiments/EO_Forum_Best_Worst.pptx"
 prs.save(out)
 print(f"saved: {out}")
 print(f"slides: {len(prs.slides)}")
